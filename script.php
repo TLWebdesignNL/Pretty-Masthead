@@ -113,6 +113,10 @@ class mod_prettymastheadInstallerScript
 	 */
 	function postflight($type, $parent)
 	{
+		if ($type == "update")
+		{
+			echo Text::_('MOD_PRETTYMASTHEAD_INSTALLERSCRIPT_RESAVE_MODULE');
+		}
 		echo Text::_('MOD_PRETTYMASTHEAD_INSTALLERSCRIPT_POSTFLIGHT');
 
 		return true;
