@@ -12,12 +12,8 @@
 use Joomla\CMS\Helper\ModuleHelper;
 use TlwebNamespace\Module\Prettymasthead\Site\Helper\PrettymastheadHelper;
 
-//$test  = PrettymastheadHelper::getText();
-
-$block            = $params->get('block');
-$customouterclass = $params->get('customouterclass');
-$before           = $params->get('before');
-$buttons          = $params->get('buttons');
-$after            = $params->get('after');
+$itemId    = PrettymastheadHelper::getItemId();
+$mastheads = $params->get('mastheads');
+$masthead = PrettymastheadHelper::getMasthead($mastheads);
 
 require ModuleHelper::getLayoutPath('mod_prettymasthead', $params->get('layout', 'default'));

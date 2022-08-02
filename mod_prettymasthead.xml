@@ -54,10 +54,12 @@
                                 label="MOD_PRETTYMASTHEAD_FIELD_MASTHEADMENUITEM_LABEL"
                                 description="MOD_PRETTYMASTHEAD_FIELD_MASTHEADMENUITEM_DESC"
                                 published="1"
-                        />
+                        >
+                            <option	value="">MOD_PRETTYMASTHEAD_FIELD_MASTHEADMENUITEM_DEFAULT</option>
+                        </field>
                         <field
                                 name="mastheadimage"
-                                type="accessiblemedia"
+                                type="media"
                                 label="MOD_PRETTYMASTHEAD_FIELD_MASTHEADIMAGE_LABEL"
                                 description="MOD_PRETTYMASTHEAD_FIELD_MASTHEADIMAGE_DESC"
                                 width="100%"
@@ -79,10 +81,10 @@
                         <field
                                 name="mastheadposition"
                                 type="radio"
-                                default="start"
+                                default="center"
                                 label="MOD_PRETTYMASTHEAD_FIELD_MASTHEADPOSITION_LABEL"
                                 description="MOD_PRETTYMASTHEAD_FIELD_MASTHEADPOSITION_DESC"
-                                layout="joomla.form.field.radio.switcher"
+                                class="btn-group"
                         >
                             <option value="start">MOD_PRETTYMASTHEAD_LEFT</option>
                             <option value="center">MOD_PRETTYMASTHEAD_CENTER</option>

@@ -9,6 +9,8 @@
 
 namespace TlwebNamespace\Module\Prettymasthead\Site\Helper;
 
+use Joomla\CMS\Factory;
+
 \defined('_JEXEC') or die;
 
 /**
@@ -19,15 +21,36 @@ namespace TlwebNamespace\Module\Prettymasthead\Site\Helper;
 class PrettymastheadHelper
 {
 	/**
-	 * Retrieve Prettymasthead test
+	 * Retrieve ItemId
 	 *
-	 * @param   Registry        $params  The module parameters
-	 * @param   CMSApplication  $app     The application
-	 *
-	 * @return  array
+	 * @return  string
 	 */
-	public static function getText()
+
+	public static function getItemId()
 	{
-		return 'PrettymastheadHelpertest';
+		$input  = Factory::getApplication()->input;
+		$itemId = $input->get('Itemid', '', 'INT');
+
+		return $itemId;
+	}
+
+	public static function getMasthead($mastheads)
+	{
+		$itemId         = self::getItemId();
+		$mastheadsArray = array();
+		if (isset($mastheads) && is_object($mastheads))
+		{
+			foreach ($mastheads as $m)
+			{
+				if ($itemId && $itemId == $m->mastheadmenuitem)
+				{
+					$mastheadsArray[$m->mastheadmenuitem]['image']       = $m->mastheadimage;
+					$mastheadsArray[$m->mastheadmenuitem]['title']       = $m->mastheadtitle;
+					$mastheadsArray[$m->mastheadmenuitem]['description'] = $m->mastheaddescription;
+					$mastheadsArray[$m->mastheadmenuitem]['position']    = $m->mastheadposition;
+				}
+			}
+		}
+		return $mastheadsArray;
 	}
 }
