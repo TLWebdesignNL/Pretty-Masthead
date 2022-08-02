@@ -37,119 +37,57 @@
                         description="MOD_PRETTYMASTHEAD_FIELD_INFO_DESC"
                 />
             </fieldset>
-            <fieldset name="content" label="MOD_PRETTYMASTHEAD_FIELDSET_CONTENT">
+            <fieldset name="mastheads" label="MOD_PRETTYMASTHEAD_FIELDSET_MASTHEAD_LABEL">
                 <field
-                        name="before"
-                        type="editor"
-                        label="MOD_PRETTYMASTHEAD_FIELD_BEFORE_LABEL"
-                        description="MOD_PRETTYMASTHEAD_FIELD_BEFORE_DESC"
-                        width="100%"
-                        height="250px"
-                        filter="safehtml"
-                />
-                <field
-                        name="after"
-                        type="editor"
-                        label="MOD_PRETTYMASTHEAD_FIELD_AFTER_LABEL"
-                        description="MOD_PRETTYMASTHEAD_FIELD_AFTER_DESC"
-                        width="100%"
-                        height="250px"
-                        filter="safehtml"
-                />
-            </fieldset>
-            <fieldset name="buttons" label="MOD_PRETTYMASTHEAD_FIELDSET_BUTTONS_LABEL">
-                <field
-                        name="block"
-                        type="radio"
-                        default="0"
-                        label="MOD_PRETTYMASTHEAD_FIELD_BLOCK_LABEL"
-                        description="MOD_PRETTYMASTHEAD_FIELD_BLOCK_DESC"
-                        class="btn-group btn-group-yesno">
-                    <option value="1">JYES</option>
-                    <option value="0">JNO</option>
-                </field>
-                <field
-                        name="customouterclass"
-                        type="text"
-                        default="py-3"
-                        label="MOD_PRETTYMASTHEAD_FIELD_CUSTOMOUTERCLASS_LABEL"
-                        description="MOD_PRETTYMASTHEAD_FIELD_CUSTOMOUTERCLASS_DESC"
-                />
-                <field
-                        name="buttons"
+                        name="mastheads"
                         type="subform"
-                        label="MOD_PRETTYMASTHEAD_FIELD_BUTTONS_LABEL"
-                        description="MOD_PRETTYMASTHEAD_FIELD_BUTTONS_DESC"
+                        label="MOD_PRETTYMASTHEAD_FIELD_MASTHEADS_LABEL"
+                        description="MOD_PRETTYMASTHEAD_FIELD_MASTHEADS_DESC"
                         multiple="true"
                         min="1"
                         max="10"
                 >
                     <form>
                         <field
-                                name="buttontext"
-                                type="text"
-                                label="MOD_PRETTYMASTHEAD_FIELD_BUTTONTEXT_LABEL"
-                                hint="MOD_PRETTYMASTHEAD_FIELD_BUTTONTEXT_HINT"
-                                description="MOD_PRETTYMASTHEAD_FIELD_BUTTONTEXT_DESC"
+                                name="mastheadmenuitem"
+                                type="menuitem"
+                                label="MOD_PRETTYMASTHEAD_FIELD_MASTHEADMENUITEM_LABEL"
+                                description="MOD_PRETTYMASTHEAD_FIELD_MASTHEADMENUITEM_DESC"
+                                published="1"
                         />
                         <field
-                                name="url"
-                                type="text"
-                                required="true"
-                                label="MOD_PRETTYMASTHEAD_FIELD_URL_LABEL"
-                                hint="MOD_PRETTYMASTHEAD_FIELD_URL_HINT"
-                                description="MOD_PRETTYMASTHEAD_FIELD_URL_DESC"
+                                name="mastheadimage"
+                                type="accessiblemedia"
+                                label="MOD_PRETTYMASTHEAD_FIELD_MASTHEADIMAGE_LABEL"
+                                description="MOD_PRETTYMASTHEAD_FIELD_MASTHEADIMAGE_DESC"
+                                width="100%"
+                                height="250px"
+                                filter="safehtml"
                         />
                         <field
-                                name="buttontarget"
-                                type="list"
-                                default="_blank"
-                                required="true"
-                                label="MOD_PRETTYMASTHEAD_FIELD_BUTTONTARGET_LABEL"
-                                description="MOD_PRETTYMASTHEAD_FIELD_BUTTONTARGET_DESC"
+                                name="mastheadtitle"
+                                type="text"
+                                label="MOD_PRETTYMASTHEAD_FIELD_MASTHEADTITLE_LABEL"
+                                description="MOD_PRETTYMASTHEAD_FIELD_MASTHEADTITLE_DESC"
+                        />
+                        <field
+                                name="mastheaddescription"
+                                type="text"
+                                label="MOD_PRETTYMASTHEAD_FIELD_MASTHEADDESCRIPTION_LABEL"
+                                description="MOD_PRETTYMASTHEAD_FIELD_MASTHEADDESCRIPTION_DESC"
+                        />
+                        <field
+                                name="mastheadposition"
+                                type="radio"
+                                default="start"
+                                label="MOD_PRETTYMASTHEAD_FIELD_MASTHEADPOSITION_LABEL"
+                                description="MOD_PRETTYMASTHEAD_FIELD_MASTHEADPOSITION_DESC"
+                                layout="joomla.form.field.radio.switcher"
                         >
-                            <option value="_blank" checked="true">MOD_PRETTYMASTHEAD_FIELD_BUTTONTARGET_BLANK</option>
-                            <option value="_self">MOD_PRETTYMASTHEAD_FIELD_BUTTONTARGET_SELF</option>
+                            <option value="start">MOD_PRETTYMASTHEAD_LEFT</option>
+                            <option value="center">MOD_PRETTYMASTHEAD_CENTER</option>
+                            <option value="right">MOD_PRETTYMASTHEAD_RIGHT</option>
                         </field>
-                        <field
-                                name="iconclass"
-                                type="text"
-                                label="MOD_PRETTYMASTHEAD_FIELD_ICONCLASS_LABEL"
-                                description="MOD_PRETTYMASTHEAD_FIELD_ICONCLASS_DESC"
-                                hint="fas fa-home"
-                        />
-                        <field
-                                name="buttonclass"
-                                type="checkboxes"
-                                default=""
-                                required="true"
-                                label="MOD_PRETTYMASTHEAD_FIELD_BUTTONCLASS_LABEL"
-                                description="MOD_PRETTYMASTHEAD_FIELD_BUTTONCLASS_DESC"
-                                multiple="true"
-                        >
-                            <option value="btn" checked="true">MOD_PRETTYMASTHEAD_BUTTONCLASS_BTN</option>
-                            <option value="btn-primary">MOD_PRETTYMASTHEAD_BUTTONCLASS_BTNPRIMARY</option>
-                            <option value="btn-secondary">MOD_PRETTYMASTHEAD_BUTTONCLASS_BTNSECONDARY</option>
-                            <option value="btn-success">MOD_PRETTYMASTHEAD_BUTTONCLASS_BTNSUCCESS</option>
-                            <option value="btn-danger">MOD_PRETTYMASTHEAD_BUTTONCLASS_BTNDANGER</option>
-                            <option value="btn-warning">MOD_PRETTYMASTHEAD_BUTTONCLASS_BTNWARNING</option>
-                            <option value="btn-info">MOD_PRETTYMASTHEAD_BUTTONCLASS_BTNINFO</option>
-                            <option value="btn-light">MOD_PRETTYMASTHEAD_BUTTONCLASS_BTNLIGHT</option>
-                            <option value="btn-dark">MOD_PRETTYMASTHEAD_BUTTONCLASS_BTNDARK</option>
-                            <option value="btn-link">MOD_PRETTYMASTHEAD_BUTTONCLASS_BTNLINK</option>
-                            <option value="btn-lg">MOD_PRETTYMASTHEAD_BUTTONCLASS_BTNLG</option>
-                            <option value="btn-sm">MOD_PRETTYMASTHEAD_BUTTONCLASS_BTNSM</option>
-                            <option value="w-100">MOD_PRETTYMASTHEAD_BUTTONCLASS_W100</option>
-                            <option value="custom">MOD_PRETTYMASTHEAD_BUTTONCLASS_CUSTOMCLASS</option>
-                        </field>
-                        <field
-                                name="custombuttonclass"
-                                type="text"
-                                label="MOD_PRETTYMASTHEAD_FIELD_CUSTOMBUTTONCLASS_LABEL"
-                                hint="btn btn-primary"
-                                description="MOD_PRETTYMASTHEAD_FIELD_CUSTOMBUTTONCLASS_DESC"
-                                showon="buttonclass:custom"
-                        />
                     </form>
                 </field>
             </fieldset>
