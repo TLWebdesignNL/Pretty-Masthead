@@ -13,7 +13,6 @@ use Joomla\CMS\HTML\HTMLHelper;
 
 ?>
 <div class="pretty-masthead">
-
 	<?php
 	foreach ($masthead as $m) :
 	$imageObj = HTMLHelper::_('cleanImageURL', $m['image']);
