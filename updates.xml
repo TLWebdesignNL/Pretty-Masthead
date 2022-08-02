@@ -41,4 +41,25 @@
         <targetplatform name="joomla" version="4.*"/>
         <client>site</client>
     </update>
+    <update>
+        <name>Pretty Masthead 0.2.0</name>
+        <description/>
+        <element>mod_prettymasthead</element>
+        <type>module</type>
+        <version>0.2.0</version>
+        <downloads>
+            <downloadurl type="full" format="zip">
+                https://github.com/TLWebdesign/Pretty-Masthead/archive/refs/tags/V0.2.0.zip
+            </downloadurl>
+        </downloads>
+        <tags>
+            <tag>stable</tag>
+        </tags>
+        <sha256>8797c5d4921e1a36e61f3a0897467dbd5a01500a4b762760397100928c537c7c</sha256>
+        <maintainer>TLWebdesign</maintainer>
+        <maintainerurl>https://www.tlwebdesign.nl/</maintainerurl>
+        <section>Updates</section>
+        <targetplatform name="joomla" version="4.*"/>
+        <client>site</client>
+    </update>
 </updates>
