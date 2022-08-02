@@ -14,6 +14,6 @@ use TlwebNamespace\Module\Prettymasthead\Site\Helper\PrettymastheadHelper;
 
 $itemId    = PrettymastheadHelper::getItemId();
 $mastheads = $params->get('mastheads');
-$masthead = PrettymastheadHelper::getMasthead($mastheads);
+$masthead  = PrettymastheadHelper::getMasthead($mastheads);
 
 require ModuleHelper::getLayoutPath('mod_prettymasthead', $params->get('layout', 'default'));
