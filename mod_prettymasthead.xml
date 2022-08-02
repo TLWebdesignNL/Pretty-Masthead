@@ -18,6 +18,9 @@
         <folder>language</folder>
         <filename>mod_prettymasthead.xml</filename>
     </files>
+    <media folder="media" destination="mod_prettymasthead">
+        <filename>logo.svg</filename>
+    </media>
     <config>
         <fields name="params">
             <fieldset name="basic">
