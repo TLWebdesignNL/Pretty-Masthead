@@ -96,7 +96,7 @@
         </fields>
     </config>
     <updateservers>
-        <server type="extension" priority="2" name="Pretty Buttons Updates">
+        <server type="extension" priority="2" name="Pretty Masthead Updates">
             https://raw.githubusercontent.com/TLWebdesign/Pretty-Masthead/main/updates.xml
         </server>
     </updateservers>
