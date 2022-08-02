@@ -21,18 +21,19 @@ use Joomla\CMS\HTML\HTMLHelper;
 			$height = $imageObj->attributes['height'];
 			$aspectRatio = $height / $width;
 			?>
-            <div class="ratio d-flex justify-content-center align-items-center"
+            <div class="ratio d-flex justify-content-<?php echo $m['position']; ?> align-items-center p-3 p-sm-5"
                  style="
                          --aspect-ratio: <?php echo round($aspectRatio * 100); ?>%;
                          background:url('<?php echo $imageObj->url; ?>') center center / cover no-repeat;
+                         min-height: 200px;
                          "
             >
-                <div class="content d-flex flex-column w-auto h-auto position-relative text-white text-center">
-                    <div class="h3 title">
-                        <span class="bg-primary py-2 px-5 mb-3"><?php echo $m['title']; ?></span>
-                    </div>
-                    <div class="description mt-2">
-                        <span class="bg-secondary p-2"><?php echo $m['description']; ?></span>
+                <div class="content d-flex flex-column align-items-<?php echo $m['position']; ?> w-auto h-auto position-relative text-white text-center">
+                    <<?php echo $m['titletag']; ?> class="title">
+                        <span class="<?php echo $m['titleclass']; ?>"><?php echo $m['title']; ?></span>
+                    </<?php echo $m['titletag']; ?>>
+                    <div class="description mt-sm-2">
+                        <span class="<?php echo $m['descriptionclass']; ?>"><?php echo $m['description']; ?></span>
                     </div>
                 </div>
             </div>

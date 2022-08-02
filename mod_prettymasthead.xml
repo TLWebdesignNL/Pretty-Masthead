@@ -54,6 +54,7 @@
                                 label="MOD_PRETTYMASTHEAD_FIELD_MASTHEADMENUITEM_LABEL"
                                 description="MOD_PRETTYMASTHEAD_FIELD_MASTHEADMENUITEM_DESC"
                                 published="1"
+                                required="true"
                         >
                             <option	value="">MOD_PRETTYMASTHEAD_FIELD_MASTHEADMENUITEM_DEFAULT</option>
                         </field>
@@ -62,15 +63,35 @@
                                 type="media"
                                 label="MOD_PRETTYMASTHEAD_FIELD_MASTHEADIMAGE_LABEL"
                                 description="MOD_PRETTYMASTHEAD_FIELD_MASTHEADIMAGE_DESC"
-                                width="100%"
-                                height="250px"
-                                filter="safehtml"
+                                required="true"
                         />
                         <field
                                 name="mastheadtitle"
                                 type="text"
                                 label="MOD_PRETTYMASTHEAD_FIELD_MASTHEADTITLE_LABEL"
                                 description="MOD_PRETTYMASTHEAD_FIELD_MASTHEADTITLE_DESC"
+                                required="true"
+                        />
+                        <field
+                                name="mastheadtitletag"
+                                type="list"
+                                label="MOD_PRETTYMASTHEAD_FIELD_MASTHEADTITLETAG_LABEL"
+                                description="MOD_PRETTYMASTHEAD_FIELD_MASTHEADTITLETAG_DESC"
+                                required="true"
+                        >
+                            <option value="h1" checked="true">MOD_PRETTYMASTHEAD_FIELD_MASTHEADTITLETAG_H1</option>
+                            <option value="h2">MOD_PRETTYMASTHEAD_FIELD_MASTHEADTITLETAG_H2</option>
+                            <option value="h3">MOD_PRETTYMASTHEAD_FIELD_MASTHEADTITLETAG_H3</option>
+                            <option value="h4">MOD_PRETTYMASTHEAD_FIELD_MASTHEADTITLETAG_H4</option>
+                            <option value="h5">MOD_PRETTYMASTHEAD_FIELD_MASTHEADTITLETAG_H5</option>
+                            <option value="h6">MOD_PRETTYMASTHEAD_FIELD_MASTHEADTITLETAG_H6</option>
+                        </field>
+                        <field
+                                name="mastheadtitleclass"
+                                type="text"
+                                label="MOD_PRETTYMASTHEAD_FIELD_MASTHEADTITLECLASS_LABEL"
+                                description="MOD_PRETTYMASTHEAD_FIELD_MASTHEADTITLECLASS_DESC"
+                                default="bg-primary py-1 py-sm-2 px-3 px-sm-5"
                         />
                         <field
                                 name="mastheaddescription"
@@ -79,16 +100,24 @@
                                 description="MOD_PRETTYMASTHEAD_FIELD_MASTHEADDESCRIPTION_DESC"
                         />
                         <field
+                                name="mastheaddescriptionclass"
+                                type="text"
+                                label="MOD_PRETTYMASTHEAD_FIELD_MASTHEADDESCRIPTIONCLASS_LABEL"
+                                description="MOD_PRETTYMASTHEAD_FIELD_MASTHEADDESCRIPTIONCLASS_DESC"
+                                default="bg-secondary p-1 py-sm-2 p-sm-3"
+                        />
+                        <field
                                 name="mastheadposition"
                                 type="radio"
                                 default="center"
                                 label="MOD_PRETTYMASTHEAD_FIELD_MASTHEADPOSITION_LABEL"
                                 description="MOD_PRETTYMASTHEAD_FIELD_MASTHEADPOSITION_DESC"
                                 class="btn-group"
+                                required="true"
                         >
                             <option value="start">MOD_PRETTYMASTHEAD_LEFT</option>
                             <option value="center">MOD_PRETTYMASTHEAD_CENTER</option>
-                            <option value="right">MOD_PRETTYMASTHEAD_RIGHT</option>
+                            <option value="end">MOD_PRETTYMASTHEAD_RIGHT</option>
                         </field>
                     </form>
                 </field>

@@ -44,13 +44,17 @@ class PrettymastheadHelper
 			{
 				if ($itemId && $itemId == $m->mastheadmenuitem)
 				{
-					$mastheadsArray[$m->mastheadmenuitem]['image']       = $m->mastheadimage;
-					$mastheadsArray[$m->mastheadmenuitem]['title']       = $m->mastheadtitle;
-					$mastheadsArray[$m->mastheadmenuitem]['description'] = $m->mastheaddescription;
-					$mastheadsArray[$m->mastheadmenuitem]['position']    = $m->mastheadposition;
+					$mastheadsArray[$m->mastheadmenuitem]['image']            = (isset($m->mastheadimage)) ? $m->mastheadimage : '';
+					$mastheadsArray[$m->mastheadmenuitem]['title']            = (isset($m->mastheadtitle)) ? $m->mastheadtitle : '';
+					$mastheadsArray[$m->mastheadmenuitem]['description']      = (isset($m->mastheaddescription)) ? $m->mastheaddescription : '';
+					$mastheadsArray[$m->mastheadmenuitem]['position']         = (isset($m->mastheadposition)) ? $m->mastheadposition : '';
+					$mastheadsArray[$m->mastheadmenuitem]['titletag']         = (isset($m->mastheadtitletag)) ? $m->mastheadtitletag : '';
+					$mastheadsArray[$m->mastheadmenuitem]['titleclass']       = (isset($m->mastheadtitleclass)) ? $m->mastheadtitleclass : '';
+					$mastheadsArray[$m->mastheadmenuitem]['descriptionclass'] = (isset($m->mastheaddescriptionclass)) ? $m->mastheaddescriptionclass : '';
 				}
 			}
 		}
+
 		return $mastheadsArray;
 	}
 }
