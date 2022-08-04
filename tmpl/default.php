@@ -10,7 +10,7 @@
 \defined('_JEXEC') or die;
 
 use Joomla\CMS\HTML\HTMLHelper;
-
+use Joomla\CMS\Uri\Uri;
 ?>
 <div class="pretty-masthead">
 	<?php
@@ -24,7 +24,7 @@ use Joomla\CMS\HTML\HTMLHelper;
             <div class="ratio d-flex justify-content-<?php echo $m['position']; ?> align-items-center p-3 p-sm-5"
                  style="
                          --aspect-ratio: <?php echo round($aspectRatio * 100); ?>%;
-                         background:url('<?php echo $imageObj->url; ?>') center center / cover no-repeat;
+                         background:url('<?php echo Uri::root().$imageObj->url; ?>') center center / cover no-repeat;
                          min-height: 200px;
                          "
             >
