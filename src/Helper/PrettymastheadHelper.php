@@ -38,6 +38,8 @@ class PrettymastheadHelper
 	{
 		$itemId         = self::getItemId();
 		$mastheadsArray = array();
+		$setDefaultMasthead = false;
+
 		if (isset($mastheads) && is_object($mastheads))
 		{
 			foreach ($mastheads as $m)
@@ -54,17 +56,16 @@ class PrettymastheadHelper
 				}
 				else
 				{
-					$mastheadsArray[1]['image']            = (isset($defaultmasthead['image'])) ? $defaultmasthead['image'] : '';
-					$mastheadsArray[1]['title']            = (isset($defaultmasthead['title'])) ? $defaultmasthead['title'] : '';
-					$mastheadsArray[1]['description']      = (isset($defaultmasthead['description'])) ? $defaultmasthead['description'] : '';
-					$mastheadsArray[1]['position']         = (isset($defaultmasthead['position'])) ? $defaultmasthead['position'] : '';
-					$mastheadsArray[1]['titletag']         = (isset($defaultmasthead['titletag'])) ? $defaultmasthead['titletag'] : '';
-					$mastheadsArray[1]['titleclass']       = (isset($defaultmasthead['titleclass'])) ? $defaultmasthead['titleclass'] : '';
-					$mastheadsArray[1]['descriptionclass'] = (isset($defaultmasthead['descriptionclass'])) ? $defaultmasthead['descriptionclass'] : '';
+					$setDefaultMasthead = true;
 				}
 			}
 		}
 		else
+		{
+			$setDefaultMasthead = true;
+		}
+
+		if ($setDefaultMasthead)
 		{
 			$mastheadsArray[1]['image']            = (isset($defaultmasthead['image'])) ? $defaultmasthead['image'] : '';
 			$mastheadsArray[1]['title']            = (isset($defaultmasthead['title'])) ? $defaultmasthead['title'] : '';
