@@ -14,6 +14,13 @@ use TlwebNamespace\Module\Prettymasthead\Site\Helper\PrettymastheadHelper;
 
 $itemId    = PrettymastheadHelper::getItemId();
 $mastheads = $params->get('mastheads');
-$masthead  = PrettymastheadHelper::getMasthead($mastheads);
+$defaultmasthead['image'] = $params->get('defaultmastheadimage');
+$defaultmasthead['title'] = $params->get('defaultmastheadtitle');
+$defaultmasthead['description'] = $params->get('defaultmastheaddescription');
+$defaultmasthead['position'] = $params->get('defaultmastheadposition');
+$defaultmasthead['titletag'] = $params->get('defaultmastheadtitletag');
+$defaultmasthead['titleclass'] = $params->get('defaultmastheadtitleclass');
+$defaultmasthead['descriptionclass'] = $params->get('defaultmastheaddescriptionclass');
 
+$masthead  = PrettymastheadHelper::getMasthead($mastheads, $defaultmasthead);
 require ModuleHelper::getLayoutPath('mod_prettymasthead', $params->get('layout', 'default'));

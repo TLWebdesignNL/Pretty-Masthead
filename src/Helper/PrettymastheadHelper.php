@@ -34,7 +34,7 @@ class PrettymastheadHelper
 		return $itemId;
 	}
 
-	public static function getMasthead($mastheads)
+	public static function getMasthead($mastheads, $defaultmasthead)
 	{
 		$itemId         = self::getItemId();
 		$mastheadsArray = array();
@@ -52,7 +52,27 @@ class PrettymastheadHelper
 					$mastheadsArray[$m->mastheadmenuitem]['titleclass']       = (isset($m->mastheadtitleclass)) ? $m->mastheadtitleclass : '';
 					$mastheadsArray[$m->mastheadmenuitem]['descriptionclass'] = (isset($m->mastheaddescriptionclass)) ? $m->mastheaddescriptionclass : '';
 				}
+				else
+				{
+					$mastheadsArray[1]['image']            = (isset($defaultmasthead['image'])) ? $defaultmasthead['image'] : '';
+					$mastheadsArray[1]['title']            = (isset($defaultmasthead['title'])) ? $defaultmasthead['title'] : '';
+					$mastheadsArray[1]['description']      = (isset($defaultmasthead['description'])) ? $defaultmasthead['description'] : '';
+					$mastheadsArray[1]['position']         = (isset($defaultmasthead['position'])) ? $defaultmasthead['position'] : '';
+					$mastheadsArray[1]['titletag']         = (isset($defaultmasthead['titletag'])) ? $defaultmasthead['titletag'] : '';
+					$mastheadsArray[1]['titleclass']       = (isset($defaultmasthead['titleclass'])) ? $defaultmasthead['titleclass'] : '';
+					$mastheadsArray[1]['descriptionclass'] = (isset($defaultmasthead['descriptionclass'])) ? $defaultmasthead['descriptionclass'] : '';
+				}
 			}
+		}
+		else
+		{
+			$mastheadsArray[1]['image']            = (isset($defaultmasthead['image'])) ? $defaultmasthead['image'] : '';
+			$mastheadsArray[1]['title']            = (isset($defaultmasthead['title'])) ? $defaultmasthead['title'] : '';
+			$mastheadsArray[1]['description']      = (isset($defaultmasthead['description'])) ? $defaultmasthead['description'] : '';
+			$mastheadsArray[1]['position']         = (isset($defaultmasthead['position'])) ? $defaultmasthead['position'] : '';
+			$mastheadsArray[1]['titletag']         = (isset($defaultmasthead['titletag'])) ? $defaultmasthead['titletag'] : '';
+			$mastheadsArray[1]['titleclass']       = (isset($defaultmasthead['titleclass'])) ? $defaultmasthead['titleclass'] : '';
+			$mastheadsArray[1]['descriptionclass'] = (isset($defaultmasthead['descriptionclass'])) ? $defaultmasthead['descriptionclass'] : '';
 		}
 
 		return $mastheadsArray;

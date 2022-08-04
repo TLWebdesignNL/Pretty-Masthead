@@ -40,14 +40,78 @@
                         description="MOD_PRETTYMASTHEAD_FIELD_INFO_DESC"
                 />
             </fieldset>
-            <fieldset name="mastheads" label="MOD_PRETTYMASTHEAD_FIELDSET_MASTHEAD_LABEL">
+            <fieldset name="mastheads" label="MOD_PRETTYMASTHEAD_FIELDSET_MASTHEADS_LABEL">
+            <fieldset name="defaultmasthead" label="MOD_PRETTYMASTHEAD_FIELDSET_DEFAULTMASTHEADS_LABEL">
                 <field
+                        name="defaultmastheadimage"
+                        type="media"
+                        label="MOD_PRETTYMASTHEAD_FIELD_DEFAULTMASTHEADIMAGE_LABEL"
+                        description="MOD_PRETTYMASTHEAD_FIELD_DEFAULTMASTHEADIMAGE_DESC"
+                        required="true"
+                />
+                <field
+                        name="defaultmastheadtitle"
+                        type="text"
+                        label="MOD_PRETTYMASTHEAD_FIELD_DEFAULTMASTHEADTITLE_LABEL"
+                        description="MOD_PRETTYMASTHEAD_FIELD_DEFAULTMASTHEADTITLE_DESC"
+                        required="true"
+                />
+                <field
+                        name="defaultmastheadtitletag"
+                        type="list"
+                        label="MOD_PRETTYMASTHEAD_FIELD_DEFAULTMASTHEADTITLETAG_LABEL"
+                        description="MOD_PRETTYMASTHEAD_FIELD_DEFAULTMASTHEADTITLETAG_DESC"
+                        required="true"
+                >
+                    <option value="h1" checked="true">MOD_PRETTYMASTHEAD_FIELD_MASTHEADTITLETAG_H1</option>
+                    <option value="h2">MOD_PRETTYMASTHEAD_FIELD_MASTHEADTITLETAG_H2</option>
+                    <option value="h3">MOD_PRETTYMASTHEAD_FIELD_MASTHEADTITLETAG_H3</option>
+                    <option value="h4">MOD_PRETTYMASTHEAD_FIELD_MASTHEADTITLETAG_H4</option>
+                    <option value="h5">MOD_PRETTYMASTHEAD_FIELD_MASTHEADTITLETAG_H5</option>
+                    <option value="h6">MOD_PRETTYMASTHEAD_FIELD_MASTHEADTITLETAG_H6</option>
+                </field>
+                <field
+                        name="defaultmastheadtitleclass"
+                        type="text"
+                        label="MOD_PRETTYMASTHEAD_FIELD_DEFAULTMASTHEADTITLECLASS_LABEL"
+                        description="MOD_PRETTYMASTHEAD_FIELD_DEFAULTMASTHEADTITLECLASS_DESC"
+                        default="bg-primary py-1 py-sm-2 px-3 px-sm-5"
+                />
+                <field
+                        name="defaultmastheaddescription"
+                        type="text"
+                        label="MOD_PRETTYMASTHEAD_FIELD_DEFAULTMASTHEADDESCRIPTION_LABEL"
+                        description="MOD_PRETTYMASTHEAD_FIELD_DEFAULTMASTHEADDESCRIPTION_DESC"
+                />
+                <field
+                        name="defaultmastheaddescriptionclass"
+                        type="text"
+                        label="MOD_PRETTYMASTHEAD_FIELD_DEFAULTMASTHEADDESCRIPTIONCLASS_LABEL"
+                        description="MOD_PRETTYMASTHEAD_FIELD_DEFAULTMASTHEADDESCRIPTIONCLASS_DESC"
+                        default="bg-secondary p-1 py-sm-2 p-sm-3"
+                />
+                <field
+                        name="defaultmastheadposition"
+                        type="radio"
+                        default="center"
+                        label="MOD_PRETTYMASTHEAD_FIELD_DEFAULTMASTHEADPOSITION_LABEL"
+                        description="MOD_PRETTYMASTHEAD_FIELD_DEFAULTMASTHEADPOSITION_DESC"
+                        class="btn-group"
+                        required="true"
+                >
+                    <option value="start">MOD_PRETTYMASTHEAD_LEFT</option>
+                    <option value="center">MOD_PRETTYMASTHEAD_CENTER</option>
+                    <option value="end">MOD_PRETTYMASTHEAD_RIGHT</option>
+                </field>
+            </fieldset>
+            <fieldset name="menumasthead" label="MOD_PRETTYMASTHEAD_FIELDSET_MENUMASTHEADS_LABEL">
+            <field
                         name="mastheads"
                         type="subform"
                         label="MOD_PRETTYMASTHEAD_FIELD_MASTHEADS_LABEL"
                         description="MOD_PRETTYMASTHEAD_FIELD_MASTHEADS_DESC"
                         multiple="true"
-                        min="1"
+                        min="0"
                         max="10"
                 >
                     <form>
@@ -124,6 +188,7 @@
                         </field>
                     </form>
                 </field>
+            </fieldset>
             </fieldset>
         </fields>
     </config>
