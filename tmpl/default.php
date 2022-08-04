@@ -32,9 +32,11 @@ use Joomla\CMS\HTML\HTMLHelper;
                     <<?php echo $m['titletag']; ?> class="title">
                         <span class="<?php echo $m['titleclass']; ?>"><?php echo $m['title']; ?></span>
                     </<?php echo $m['titletag']; ?>>
-                    <div class="description mt-sm-2">
-                        <span class="<?php echo $m['descriptionclass']; ?>"><?php echo $m['description']; ?></span>
-                    </div>
+                    <?php if (!empty($m['description'])) : ?>
+                        <div class="description mt-sm-2">
+                            <span class="<?php echo $m['descriptionclass']; ?>"><?php echo $m['description']; ?></span>
+                        </div>
+                    <?php endif; // if description is not empty ?>
                 </div>
             </div>
 		<?php endif; ?>
