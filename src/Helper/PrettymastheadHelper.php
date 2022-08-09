@@ -82,11 +82,11 @@ class PrettymastheadHelper
 			if ($mh['image'] != "")
 			{
 				$mastheadsArray[$key]['image'] = HTMLHelper::_('cleanImageURL', $mh['image']);
-				if ($mastheadsArray[$key]['image'] != "")
+				if ($mastheadsArray[$key]['image']->url != "")
 				{
 					if ($mastheadsArray[$key]['image']->attributes['width'] == 0 || $mastheadsArray[$key]['image']->attributes['height'] == 0)
 					{
-						list($width, $height) = getimagesize($mastheadsArray[$key]['image']);
+						list($width, $height) = getimagesize($mastheadsArray[$key]['image']->url);
 						$mastheadsArray[$key]['image']->attributes['width'] = $width;
 						$mastheadsArray[$key]['image']->attributes['height'] = $height;
 					}

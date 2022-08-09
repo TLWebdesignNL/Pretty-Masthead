@@ -18,7 +18,11 @@ use Joomla\CMS\HTML\HTMLHelper;
 		if ($m['image']->url != "") :
 			$width = $m['image']->attributes['width'];
 			$height = $m['image']->attributes['height'];
-			$aspectRatio = $height / $width;
+	        $aspectRatio = 0.25;
+			if ($width != 0 && $height != 0)
+                {
+                    $aspectRatio = $height / $width;
+				}
 			?>
 			<div class="ratio d-flex justify-content-<?php echo $m['position']; ?> align-items-center p-3 p-sm-5"
 				 style="
