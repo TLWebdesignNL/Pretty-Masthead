@@ -10,6 +10,8 @@
 namespace TlwebNamespace\Module\Prettymasthead\Site\Helper;
 
 use Joomla\CMS\Factory;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Uri\Uri;
 
 \defined('_JEXEC') or die;
 
@@ -75,7 +77,24 @@ class PrettymastheadHelper
 			$mastheadsArray[1]['titleclass']       = (isset($defaultmasthead['titleclass'])) ? $defaultmasthead['titleclass'] : '';
 			$mastheadsArray[1]['descriptionclass'] = (isset($defaultmasthead['descriptionclass'])) ? $defaultmasthead['descriptionclass'] : '';
 		}
+		foreach ($mastheadsArray as $key => $mh)
+		{
+			if ($mh['image'] != "")
+			{
+				$mastheadsArray[$key]['image'] = HTMLHelper::_('cleanImageURL', $mh['image']);
+				if ($mastheadsArray[$key]['image'] != "")
+				{
+					if ($mastheadsArray[$key]['image']->attributes['width'] == 0 || $mastheadsArray[$key]['image']->attributes['height'] == 0)
+					{
+						list($width, $height) = getimagesize($mastheadsArray[$key]['image']);
+						$mastheadsArray[$key]['image']->attributes['width'] = $width;
+						$mastheadsArray[$key]['image']->attributes['height'] = $height;
+					}
+					$mastheadsArray[$key]['image']->url = Uri::root() . $mastheadsArray[$key]['image']->url;
+				}
 
+			}
+		}
 		return $mastheadsArray;
 	}
 }
