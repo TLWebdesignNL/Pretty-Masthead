@@ -13,38 +13,34 @@ use Joomla\CMS\HTML\HTMLHelper;
 
 ?>
 <div class="pretty-masthead">
-	<?php
-	foreach ($masthead as $m) :
-		if ($m['image']->url != "") :
-			$width = $m['image']->attributes['width'];
-			$height = $m['image']->attributes['height'];
-	        $aspectRatio = 0.25;
-			if ($width != 0 && $height != 0)
-                {
-                    $aspectRatio = $height / $width;
-				}
-			?>
-			<div class="ratio d-flex justify-content-<?php echo $m['position']; ?> align-items-center p-3 p-sm-5"
-				 style="
-						 --aspect-ratio: <?php echo round($aspectRatio * 100); ?>%;
-						 background:url('<?php echo $m['image']->url; ?>') center center / cover no-repeat;
-						 min-height: 200px;
-						 "
-			>
-				<div class="content d-flex flex-column align-items-<?php echo $m['position']; ?> w-auto h-auto position-relative text-white text-center">
-					<<?php echo $m['titletag']; ?> class="title">
-						<span class="<?php echo $m['titleclass']; ?>"><?php echo $m['title']; ?></span>
-					</<?php echo $m['titletag']; ?>>
-					<?php if (!empty($m['description'])) : ?>
-						<div class="description mt-sm-2">
-							<span class="<?php echo $m['descriptionclass']; ?>"><?php echo $m['description']; ?></span>
-						</div>
-					<?php
-						// If description is not empty
-					endif;
-					?>
-				</div>
-			</div>
-		<?php endif; ?>
-	<?php endforeach; ?>
+    <?php
+    if ($masthead['image']->url != "") :
+	    $width = $masthead['image']->attributes['width'];
+	    $height = $masthead['image']->attributes['height'];
+	    $aspectRatio = 0.25;
+
+        if ($width != 0 && $height != 0)
+        {
+            $aspectRatio = $height / $width;
+        }
+        ?>
+        <div class="ratio d-flex justify-content-<?php echo $masthead['position']; ?> align-items-center p-3 p-sm-5"
+             style="
+                     --aspect-ratio: <?php echo round($aspectRatio * 100); ?>%;
+                     background:url('<?php echo $masthead['image']->url; ?>') center center / cover no-repeat;
+                     min-height: 200px;
+                     "
+        >
+            <div class="content d-flex flex-column align-items-<?php echo $masthead['position']; ?> w-auto h-auto position-relative text-white text-center">
+                <<?php echo $masthead['titletag']; ?> class="title">
+                    <span class="<?php echo $masthead['titleclass']; ?>"><?php echo $masthead['title']; ?></span>
+                </<?php echo $masthead['titletag']; ?>>
+                <?php if (!empty($masthead['description'])) : ?>
+                    <div class="description mt-sm-2">
+                        <span class="<?php echo $masthead['descriptionclass']; ?>"><?php echo $masthead['description']; ?></span>
+                    </div>
+                <?php endif; ?>
+            </div>
+        </div>
+    <?php endif; ?>
 </div>
