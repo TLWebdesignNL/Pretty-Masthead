@@ -105,22 +105,27 @@ class PrettymastheadHelper
 					$mastheadArray['titleclass']       = (isset($m->mastheadtitleclass)) ? $m->mastheadtitleclass : '';
 					$mastheadArray['descriptionclass'] = (isset($m->mastheaddescriptionclass)) ? $m->mastheaddescriptionclass : '';
 
-					// TRY TO GRAB ARTICLE
-					$article = self::getArticle($app, $input);
-
-					if (isset($article->image) && !empty($article->image))
+					// GET ACTIVE MENU TO CHECK IF WE HAVE CATEGORY VIEW AND ONLY THEN TRY TO GET ARTICLE
+					$activeMenuQuery = $app->getMenu()->getActive()->query;
+					if ($activeMenuQuery['view'] == "category")
 					{
-						$mastheadArray['image'] = $article->image;
-					}
+						// TRY TO GRAB ARTICLE
+						$article = self::getArticle($app, $input);
 
-					if (isset($article->title) && !empty($article->title))
-					{
-						$mastheadArray['title'] = $article->title;
-					}
+						if (isset($article->image) && !empty($article->image))
+						{
+							$mastheadArray['image'] = $article->image;
+						}
 
-					if (isset($article->description) && !empty($article->description))
-					{
-						$mastheadArray['description'] = $article->description;
+						if (isset($article->title) && !empty($article->title))
+						{
+							$mastheadArray['title'] = $article->title;
+						}
+
+						if (isset($article->description) && !empty($article->description))
+						{
+							$mastheadArray['description'] = $article->description;
+						}
 					}
 				}
 			}
