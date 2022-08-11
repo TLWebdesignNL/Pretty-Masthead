@@ -12,7 +12,6 @@
 use Joomla\CMS\Helper\ModuleHelper;
 use TlwebNamespace\Module\Prettymasthead\Site\Helper\PrettymastheadHelper;
 
-$itemId    = PrettymastheadHelper::getItemId();
 $mastheads = $params->get('mastheads');
 $defaultmasthead['image'] = $params->get('defaultmastheadimage');
 $defaultmasthead['title'] = $params->get('defaultmastheadtitle');

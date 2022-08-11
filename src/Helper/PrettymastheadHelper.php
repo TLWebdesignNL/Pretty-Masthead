@@ -12,8 +12,6 @@ namespace TlwebNamespace\Module\Prettymasthead\Site\Helper;
 use Joomla\CMS\Factory;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Uri\Uri;
-use Joomla\Component\Fields\Administrator\Helper\FieldsHelper;
-use mysql_xdevapi\DocResult;
 
 \defined('_JEXEC') or die;
 
@@ -24,34 +22,24 @@ use mysql_xdevapi\DocResult;
  */
 class PrettymastheadHelper
 {
+
 	/**
-	 * Retrieve ItemId
+	 * Retrieve Article
 	 *
-	 * @return  string
+	 * @param $app
+	 * @param $input
+	 *
+	 * @return false|\stdClass
 	 */
-
-	public static function getItemId()
+	public static function getArticle($app, $input)
 	{
-		$input  = Factory::getApplication()->input;
-		$itemId = $input->get('Itemid', '', 'INT');
-
-		$article = self::getArticle();
-		//echo "<pre>";var_dump($article);
-		return $itemId;
-	}
-
-	public static function getArticle()
-	{
-		$app = Factory::getApplication();
-		if (
-			$app->input->get('option') === 'com_content'
-			&& $app->input->get('view') === 'article'
-		) {
-			// Save to here all the datas you need return
+		if ($input->get('option') === 'com_content' && $input->get('view') === 'article')
+		{
+			// Save all the data you need to return
 			$items = new \stdClass;
 
 			// Get the article ID
-			$article_id = $app->input->getInt('id');
+			$articleId = $app->input->getInt('id');
 
 			// Set application parameters in model
 			$appParams = $app->getParams();
@@ -62,35 +50,38 @@ class PrettymastheadHelper
 			// Please, use any other filter as you need
 			$model->setState('params', $appParams);
 			$model->setState('filter.published', 1);
-			$model->setState('article.id', (int) $article_id);
+			$model->setState('article.id', (int) $articleId);
 
 			$article = $model->getItem();
 
-			// Get the custom fields
-			$fields = [];
-			$jcfields = FieldsHelper::getFields('com_content.article', $article);
-			if (!empty($jcfields)) {
-				foreach ($jcfields as $field) {
-					$fields[$field->name] = $field;
-				}
-			}
-
-			$items->fields = $fields;
-
-			// rest of the code... like get the title, introtext etc
-			//echo "<pre>";var_dump($article);
+			$images             = json_decode($article->images);
+			$items->title       = $article->title;
+			$items->image       = ($images->image_intro) ? : $images->image_fulltext;
+			$items->description = strip_tags(str_replace('</p>', ' ', $article->introtext));
 
 			return $items;
 		}
+
+		return false;
 	}
 
-	public static function getMasthead($mastheads, $defaultmasthead)
+	/**
+	 * Retrieve Masthead
+	 *
+	 * @param $mastheads
+	 * @param $defaultmasthead
+	 *
+	 * @return array
+	 */
+	public static function getMasthead($mastheads, $defaultmasthead): array
 	{
-		$itemId         = self::getItemId();
-		$mastheadArray = array();
-		$setDefaultMasthead = false;
+		$app   = Factory::getApplication();
+		$input = $app->input;
 
-		// SET DEFAULT MASYHEAD (WILL BE OVERWRITTEN IF THERE IS A SPECIFIC MASTHEAD MATCHING THE ITEMID
+		$itemId        = $input->get('Itemid', '', 'INT');
+		$mastheadArray = array();
+
+		// SET DEFAULT MASTHEAD (WILL BE OVERWRITTEN IF THERE IS A SPECIFIC MASTHEAD MATCHING THE ITEMID
 		$mastheadArray['image']            = (isset($defaultmasthead['image'])) ? $defaultmasthead['image'] : '';
 		$mastheadArray['title']            = (isset($defaultmasthead['title'])) ? $defaultmasthead['title'] : '';
 		$mastheadArray['description']      = (isset($defaultmasthead['description'])) ? $defaultmasthead['description'] : '';
@@ -104,7 +95,7 @@ class PrettymastheadHelper
 		{
 			foreach ($mastheads as $m)
 			{
-				if ($itemId && $itemId == $m->mastheadmenuitem)
+				if (!empty($itemId) && $itemId == $m->mastheadmenuitem)
 				{
 					$mastheadArray['image']            = (isset($m->mastheadimage)) ? $m->mastheadimage : '';
 					$mastheadArray['title']            = (isset($m->mastheadtitle)) ? $m->mastheadtitle : '';
@@ -113,24 +104,46 @@ class PrettymastheadHelper
 					$mastheadArray['titletag']         = (isset($m->mastheadtitletag)) ? $m->mastheadtitletag : '';
 					$mastheadArray['titleclass']       = (isset($m->mastheadtitleclass)) ? $m->mastheadtitleclass : '';
 					$mastheadArray['descriptionclass'] = (isset($m->mastheaddescriptionclass)) ? $m->mastheaddescriptionclass : '';
+
+					// TRY TO GRAB ARTICLE
+					$article = self::getArticle($app, $input);
+
+					if (isset($article->image) && !empty($article->image))
+					{
+						$mastheadArray['image'] = $article->image;
+					}
+
+					if (isset($article->title) && !empty($article->title))
+					{
+						$mastheadArray['title'] = $article->title;
+					}
+
+					if (isset($article->description) && !empty($article->description))
+					{
+						$mastheadArray['description'] = $article->description;
+					}
 				}
 			}
 		}
+
 		// FORMAT MASTHEAD IMAGE
 		if ($mastheadArray['image'] != "")
 		{
 			$mastheadArray['image'] = HTMLHelper::_('cleanImageURL', $mastheadArray['image']);
+
 			if ($mastheadArray['image']->url != "")
 			{
 				if ($mastheadArray['image']->attributes['width'] == 0 || $mastheadArray['image']->attributes['height'] == 0)
 				{
 					list($width, $height) = getimagesize($mastheadArray['image']->url);
-					$mastheadArray['image']->attributes['width'] = $width;
+					$mastheadArray['image']->attributes['width']  = $width;
 					$mastheadArray['image']->attributes['height'] = $height;
 				}
+
 				$mastheadArray['image']->url = Uri::root() . $mastheadArray['image']->url;
 			}
 		}
+
 		return $mastheadArray;
 	}
 }
