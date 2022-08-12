@@ -33,11 +33,11 @@ use Joomla\CMS\HTML\HTMLHelper;
         >
             <div class="content d-flex flex-column align-items-<?php echo $masthead['position']; ?> w-auto h-auto position-relative text-white text-center">
                 <<?php echo $masthead['titletag']; ?> class="title">
-                    <span class="<?php echo $masthead['titleclass']; ?>"><?php echo $masthead['title']; ?></span>
+                    <span class="<?php echo $masthead['titleclass']; ?>" style="-webkit-box-decoration-break:clone;box-decoration-break:clone;"><?php echo $masthead['title']; ?></span>
                 </<?php echo $masthead['titletag']; ?>>
                 <?php if (!empty($masthead['description'])) : ?>
                     <div class="description mt-sm-2">
-                        <span class="<?php echo $masthead['descriptionclass']; ?>"><?php echo $masthead['description']; ?></span>
+                        <span class="<?php echo $masthead['descriptionclass']; ?>" style="-webkit-box-decoration-break:clone;box-decoration-break:clone;"><?php echo $masthead['description']; ?></span>
                     </div>
                 <?php endif; ?>
             </div>
