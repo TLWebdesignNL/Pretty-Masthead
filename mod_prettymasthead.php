@@ -13,6 +13,7 @@ use Joomla\CMS\Helper\ModuleHelper;
 use TlwebNamespace\Module\Prettymasthead\Site\Helper\PrettymastheadHelper;
 
 $mastheads = $params->get('mastheads');
+$descLength = $params->get('desclength');
 $defaultmasthead['image'] = $params->get('defaultmastheadimage');
 $defaultmasthead['title'] = $params->get('defaultmastheadtitle');
 $defaultmasthead['description'] = $params->get('defaultmastheaddescription');
@@ -21,5 +22,5 @@ $defaultmasthead['titletag'] = $params->get('defaultmastheadtitletag');
 $defaultmasthead['titleclass'] = $params->get('defaultmastheadtitleclass');
 $defaultmasthead['descriptionclass'] = $params->get('defaultmastheaddescriptionclass');
 
-$masthead  = PrettymastheadHelper::getMasthead($mastheads, $defaultmasthead);
+$masthead  = PrettymastheadHelper::getMasthead($mastheads, $defaultmasthead, $descLength);
 require ModuleHelper::getLayoutPath('mod_prettymasthead', $params->get('layout', 'default'));

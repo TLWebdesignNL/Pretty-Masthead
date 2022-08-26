@@ -7,7 +7,7 @@
     <authorUrl>https://tlwebdesign.nl</authorUrl>
     <copyright>TLWebdesign</copyright>
     <license>GNU General Public License version 2 or later; see LICENSE.txt</license>
-    <version>0.3.2</version>
+    <version>0.3.3</version>
     <description>MOD_PRETTYMASTHEAD_XML_DESCRIPTION</description>
     <scriptfile>script.php</scriptfile>
     <namespace path="src">TlwebNamespace\Module\Prettymasthead</namespace>
@@ -39,6 +39,18 @@
                         type="note"
                         description="MOD_PRETTYMASTHEAD_FIELD_INFO_DESC"
                 />
+            </fieldset>
+            <fieldset name="settings" label="MOD_PRETTYMASTHEAD_FIELDSET_SETTINGS_LABEL">
+                <field
+                        name="desclength"
+                        type="number"
+                        label="MOD_PRETTYMASTHEAD_FIELD_DESCLENGTH_LABEL"
+                        description="MOD_PRETTYMASTHEAD_FIELD_DESCLENGTH_DESC"
+                        default="40"
+                        min="1"
+                        max="255"
+                        step="1"
+                    />
             </fieldset>
             <fieldset name="mastheads" label="MOD_PRETTYMASTHEAD_FIELDSET_MASTHEADS_LABEL">
                 <fieldset name="defaultmasthead" label="MOD_PRETTYMASTHEAD_FIELDSET_DEFAULTMASTHEADS_LABEL">

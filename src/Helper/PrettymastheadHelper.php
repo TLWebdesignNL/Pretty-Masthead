@@ -12,6 +12,7 @@ namespace TlwebNamespace\Module\Prettymasthead\Site\Helper;
 use Joomla\CMS\Factory;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Uri\Uri;
+use Joomla\CMS\HTML\Helpers\StringHelper;
 
 \defined('_JEXEC') or die;
 
@@ -73,7 +74,7 @@ class PrettymastheadHelper
 	 *
 	 * @return array
 	 */
-	public static function getMasthead($mastheads, $defaultmasthead): array
+	public static function getMasthead($mastheads, $defaultmasthead, $descLength): array
 	{
 		$app   = Factory::getApplication();
 		$input = $app->input;
@@ -149,6 +150,10 @@ class PrettymastheadHelper
 			}
 		}
 
+		// truncate description if descLength is set
+		if (isset($descLength) && !empty($descLength) ) {
+			$mastheadArray['description'] = StringHelper::truncate($mastheadArray['description'], $descLength, true, true);
+		}
 		return $mastheadArray;
 	}
 }
