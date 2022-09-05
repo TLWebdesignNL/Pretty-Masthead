@@ -1,10 +1,11 @@
 <?php
+
 /**
- * @package	 Joomla.Site
+ * @package  Joomla.Site
  * @subpackage  mod_prettymasthead
  *
  * @copyright   Copyright (C) 2022 TLWebdesign. All rights reserved.
- * @license	 GNU General Public License version 2 or later; see LICENSE.txt
+ * @license  GNU General Public License version 2 or later; see LICENSE.txt
  */
 
 \defined('_JEXEC') or die;
@@ -15,12 +16,11 @@ use Joomla\CMS\HTML\HTMLHelper;
 <div class="pretty-masthead">
     <?php
     if ($masthead['image']->url != "") :
-	    $width = $masthead['image']->attributes['width'];
-	    $height = $masthead['image']->attributes['height'];
-	    $aspectRatio = 0.25;
+        $width = $masthead['image']->attributes['width'];
+        $height = $masthead['image']->attributes['height'];
+        $aspectRatio = 0.25;
 
-        if ($width != 0 && $height != 0)
-        {
+        if ($width != 0 && $height != 0) {
             $aspectRatio = $height / $width;
         }
         ?>
@@ -31,13 +31,26 @@ use Joomla\CMS\HTML\HTMLHelper;
                      min-height: 200px;
                      "
         >
-            <div class="content d-flex flex-column align-items-<?php echo $masthead['position']; ?> w-auto h-auto position-relative text-white text-center">
+            <div
+                    class="content d-flex flex-column align-items-<?php echo $masthead['position']; ?>
+                    w-auto h-auto position-relative text-white text-center"
+            >
                 <<?php echo $masthead['titletag']; ?> class="title">
-                    <span class="<?php echo $masthead['titleclass']; ?>" style="-webkit-box-decoration-break:clone;box-decoration-break:clone;"><?php echo $masthead['title']; ?></span>
+                    <span
+                            class="<?php echo $masthead['titleclass']; ?>"
+                            style="-webkit-box-decoration-break:clone;box-decoration-break:clone;"
+                    >
+                        <?php echo $masthead['title']; ?>
+                    </span>
                 </<?php echo $masthead['titletag']; ?>>
                 <?php if (!empty($masthead['description'])) : ?>
                     <div class="description mt-sm-2">
-                        <span class="<?php echo $masthead['descriptionclass']; ?>" style="-webkit-box-decoration-break:clone;box-decoration-break:clone;"><?php echo $masthead['description']; ?></span>
+                        <span
+                                class="<?php echo $masthead['descriptionclass']; ?>"
+                                style="-webkit-box-decoration-break:clone;box-decoration-break:clone;"
+                        >
+                            <?php echo $masthead['description']; ?>
+                        </span>
                     </div>
                 <?php endif; ?>
             </div>

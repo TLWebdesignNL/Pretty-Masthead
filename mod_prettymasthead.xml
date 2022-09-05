@@ -50,7 +50,7 @@
                         min="1"
                         max="255"
                         step="1"
-                    />
+                />
             </fieldset>
             <fieldset name="mastheads" label="MOD_PRETTYMASTHEAD_FIELDSET_MASTHEADS_LABEL">
                 <fieldset name="defaultmasthead" label="MOD_PRETTYMASTHEAD_FIELDSET_DEFAULTMASTHEADS_LABEL">
@@ -117,7 +117,7 @@
                     </field>
                 </fieldset>
                 <fieldset name="menumasthead" label="MOD_PRETTYMASTHEAD_FIELDSET_MENUMASTHEADS_LABEL">
-                <field
+                    <field
                             name="mastheads"
                             type="subform"
                             label="MOD_PRETTYMASTHEAD_FIELD_MASTHEADS_LABEL"
@@ -135,7 +135,7 @@
                                     published="1"
                                     required="true"
                             >
-                                <option	value="">MOD_PRETTYMASTHEAD_FIELD_MASTHEADMENUITEM_DEFAULT</option>
+                                <option value="">MOD_PRETTYMASTHEAD_FIELD_MASTHEADMENUITEM_DEFAULT</option>
                             </field>
                             <field
                                     name="mastheadimage"
