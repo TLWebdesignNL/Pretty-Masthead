@@ -24,11 +24,12 @@ use Joomla\CMS\HTML\HTMLHelper;
             $aspectRatio = $height / $width;
         }
         ?>
-        <div class="ratio d-flex justify-content-<?php echo $masthead['position']; ?> align-items-center p-3 p-sm-5"
+        <div class="ratio d-flex justify-content-<?php echo $masthead['position']; ?> align-items-center p-3 p-sm-5 <?php echo $mainDivClass; ?>"
              style="
                      --aspect-ratio: <?php echo round($aspectRatio * 100); ?>%;
                      background:url('<?php echo $masthead['image']->url; ?>') center center / cover no-repeat;
-                     min-height: 200px;
+             <?php echo ($minHeight && $minHeight != 0) ? "min-height: ".$minHeight."px;" : ""; ?>
+             <?php echo ($maxHeight && $maxHeight != 0) ? "max-height: ".$maxHeight."px;" : ""; ?>
                      "
         >
             <div

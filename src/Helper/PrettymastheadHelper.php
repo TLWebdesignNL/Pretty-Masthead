@@ -25,57 +25,16 @@ use Joomla\CMS\HTML\Helpers\StringHelper;
 class PrettymastheadHelper
 {
     /**
-     * Retrieve Article
-     *
-     * @param $app
-     * @param $input
-     *
-     * @return false|stdClass
-     */
-    public static function getArticle($app, $input)
-    {
-        if ($input->get('option') === 'com_content' && $input->get('view') === 'article') {
-            // Save all the data you need to return
-            $items = new stdClass();
-
-            // Get the article ID
-            $articleId = $app->input->getInt('id');
-
-            // Set application parameters in model
-            $appParams = $app->getParams();
-
-            // The article model
-            $model = $app->bootComponent('com_content')
-                ->getMVCFactory()->createModel('Article', 'Site', ['ignore_request' => true]);
-
-            // Please, use any other filter as you need
-            $model->setState('params', $appParams);
-            $model->setState('filter.published', 1);
-            $model->setState('article.id', (int) $articleId);
-
-            $article = $model->getItem();
-
-            $images             = json_decode($article->images);
-            $items->title       = $article->title;
-            $items->image       = ($images->image_intro) ? : $images->image_fulltext;
-            $items->description = strip_tags(str_replace('</p>', ' ', $article->introtext));
-
-            return $items;
-        }
-
-        return false;
-    }
-
-    /**
      * Retrieve Masthead
      *
      * @param $mastheads
      * @param $defaultmasthead
      * @param $descLength
+     * @param $descSource
      *
      * @return array
      */
-    public static function getMasthead($mastheads, $defaultmasthead, $descLength): array
+    public static function getMasthead($mastheads, $defaultmasthead, $descLength, $descSource): array
     {
         $app   = Factory::getApplication();
         $input = $app->input;
@@ -109,7 +68,7 @@ class PrettymastheadHelper
 
                     if ($activeMenuQuery['view'] == "category") {
                         // TRY TO GRAB ARTICLE
-                        $article = self::getArticle($app, $input);
+                        $article = self::getArticle($app, $input, $descSource);
 
                         if (isset($article->image) && !empty($article->image)) {
                             $mastheadArray['image'] = $article->image;
@@ -148,5 +107,67 @@ class PrettymastheadHelper
         }
 
         return $mastheadArray;
+    }
+
+    /**
+     * Retrieve Article
+     *
+     * @param $app
+     * @param $input
+     * @param $descSource
+     *
+     * @return false|object
+     */
+    public static function getArticle($app, $input, $descSource)
+    {
+        if ($input->get('option') === 'com_content' && $input->get('view') === 'article') {
+            // Save all the data you need to return
+            $items = new stdClass();
+
+            // Get the article ID
+            $articleId = $app->input->getInt('id');
+
+            // Set application parameters in model
+            $appParams = $app->getParams();
+
+            // The article model
+            $model = $app->bootComponent('com_content')
+                ->getMVCFactory()->createModel('Article', 'Site', ['ignore_request' => true]);
+
+            // Please, use any other filter as you need
+            $model->setState('params', $appParams);
+            $model->setState('filter.published', 1);
+            $model->setState('article.id', (int) $articleId);
+
+            $article = $model->getItem();
+
+            $images             = json_decode($article->images);
+            $items->title       = $article->title;
+            $items->image       = ($images->image_intro) ? : $images->image_fulltext;
+            switch ($descSource) {
+                case "article":
+                    $items->description = strip_tags(str_replace('</p>', ' ', $article->introtext));
+                    break;
+                case "note":
+                    $items->description = $article->note;
+                    break;
+                case "imagealt":
+                    $items->description = $items->image;
+                    break;
+                case "imagecaption":
+                    $items->description = $items->image;
+                    break;
+                case "pagetitle":
+                    $items->description = $article->pagetitle;
+                    break;
+                case "metadesc":
+                    $items->description = $article->metadesc;
+                    break;
+            }
+
+            return $items;
+        }
+
+        return false;
     }
 }

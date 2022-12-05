@@ -7,7 +7,7 @@
     <authorUrl>https://tlwebdesign.nl</authorUrl>
     <copyright>TLWebdesign</copyright>
     <license>GNU General Public License version 2 or later; see LICENSE.txt</license>
-    <version>0.3.3</version>
+    <version>0.4.0</version>
     <description>MOD_PRETTYMASTHEAD_XML_DESCRIPTION</description>
     <scriptfile>script.php</scriptfile>
     <namespace path="src">TlwebNamespace\Module\Prettymasthead</namespace>
@@ -51,6 +51,49 @@
                         max="255"
                         step="1"
                 />
+                <field
+                        name="maindivclass"
+                        type="text"
+                        label="MOD_PRETTYMASTHEAD_FIELD_MAINDIVCLASS_LABEL"
+                        description="MOD_PRETTYMASTHEAD_FIELD_MAINDIVCLASS_DESC"
+                        required="false"
+                />
+                <field
+                        name="minheight"
+                        type="number"
+                        label="MOD_PRETTYMASTHEAD_FIELD_MINHEIGHT_LABEL"
+                        description="MOD_PRETTYMASTHEAD_FIELD_MINHEIGHT_DESC"
+                        default="0"
+                        min="0"
+                        max="255"
+                        step="1"
+                        required="false"
+                />
+                <field
+                        name="maxheight"
+                        type="number"
+                        label="MOD_PRETTYMASTHEAD_FIELD_MAXHEIGHT_LABEL"
+                        description="MOD_PRETTYMASTHEAD_FIELD_MAXHEIGHT_DESC"
+                        default="0"
+                        min="0"
+                        max="255"
+                        step="1"
+                        required="false"
+                />
+
+                <field
+                        name="descsource"
+                        type="list"
+                        label="MOD_PRETTYMASTHEAD_FIELD_DESCSOURCE_LABEL"
+                        description="MOD_PRETTYMASTHEAD_FIELD_DESCSOURCE_DESC"
+                >
+                    <option value="article" checked="true">MOD_PRETTYMASTHEAD_FIELD_DESCSOURCE_ARTICLE</option>
+                    <option value="note">MOD_PRETTYMASTHEAD_FIELD_DESCSOURCE_NOTE</option>
+                    <option value="imagealt">MOD_PRETTYMASTHEAD_FIELD_DESCSOURCE_IMAGEALT</option>
+                    <option value="imagecaption">MOD_PRETTYMASTHEAD_FIELD_DESCSOURCE_IMAGECAPTION</option>
+                    <option value="pagetitle">MOD_PRETTYMASTHEAD_FIELD_DESCSOURCE_PAGETITLE</option>
+                    <option value="metadesc">MOD_PRETTYMASTHEAD_FIELD_DESCSOURCE_METADESC</option>
+                </field>
             </fieldset>
             <fieldset name="mastheads" label="MOD_PRETTYMASTHEAD_FIELDSET_MASTHEADS_LABEL">
                 <fieldset name="defaultmasthead" label="MOD_PRETTYMASTHEAD_FIELDSET_DEFAULTMASTHEADS_LABEL">
