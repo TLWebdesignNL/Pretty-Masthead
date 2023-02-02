@@ -50,6 +50,8 @@ class PrettymastheadHelper
         $mastheadArray['titletag']         = (isset($defaultmasthead['titletag'])) ? $defaultmasthead['titletag'] : '';
         $mastheadArray['titleclass']       = (isset($defaultmasthead['titleclass'])) ? $defaultmasthead['titleclass'] : '';
         $mastheadArray['descriptionclass'] = (isset($defaultmasthead['descriptionclass'])) ? $defaultmasthead['descriptionclass'] : '';
+        $mastheadArray['titlevisibility'] = (isset($defaultmasthead['titlevisibility'])) ? $defaultmasthead['titlevisibility'] : '';
+        $mastheadArray['descriptionvisibility'] = (isset($defaultmasthead['descriptionvisibility'])) ? $defaultmasthead['descriptionvisibility'] : '';
 
         // LOOP THROUGH MENU ITEM SPECIFIC MASTHEADS
         if (isset($mastheads) && is_object($mastheads)) {
@@ -62,6 +64,8 @@ class PrettymastheadHelper
                     $mastheadArray['titletag']         = (isset($m->mastheadtitletag)) ? $m->mastheadtitletag : '';
                     $mastheadArray['titleclass']       = (isset($m->mastheadtitleclass)) ? $m->mastheadtitleclass : '';
                     $mastheadArray['descriptionclass'] = (isset($m->mastheaddescriptionclass)) ? $m->mastheaddescriptionclass : '';
+                    $mastheadArray['titlevisibility'] = (isset($m->mastheadtitlevisibility)) ? $m->mastheadtitlevisibility : '';
+                    $mastheadArray['descriptionvisibility'] = (isset($m->mastheaddescriptionvisibility)) ? $m->mastheaddescriptionvisibility : '';
 
                     // GET ACTIVE MENU TO CHECK IF WE HAVE CATEGORY VIEW AND ONLY THEN TRY TO GET ARTICLE
                     $activeMenuQuery = $app->getMenu()->getActive()->query;

@@ -26,6 +26,8 @@ $defaultmasthead['position'] = $params->get('defaultmastheadposition');
 $defaultmasthead['titletag'] = $params->get('defaultmastheadtitletag');
 $defaultmasthead['titleclass'] = $params->get('defaultmastheadtitleclass');
 $defaultmasthead['descriptionclass'] = $params->get('defaultmastheaddescriptionclass');
+$defaultmasthead['titlevisibility'] = $params->get('defaulttitlevisibility');
+$defaultmasthead['descriptionvisibility'] = $params->get('defaultdescriptionvisibility');
 
 $masthead  = PrettymastheadHelper::getMasthead($mastheads, $defaultmasthead, $descLength, $descSource);
 require ModuleHelper::getLayoutPath('mod_prettymasthead', $params->get('layout', 'default'));

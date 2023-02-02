@@ -7,7 +7,7 @@
     <authorUrl>https://tlwebdesign.nl</authorUrl>
     <copyright>TLWebdesign</copyright>
     <license>GNU General Public License version 2 or later; see LICENSE.txt</license>
-    <version>0.4.0</version>
+    <version>0.5.0</version>
     <description>MOD_PRETTYMASTHEAD_XML_DESCRIPTION</description>
     <scriptfile>script.php</scriptfile>
     <namespace path="src">TlwebNamespace\Module\Prettymasthead</namespace>
@@ -158,6 +158,32 @@
                         <option value="center">MOD_PRETTYMASTHEAD_CENTER</option>
                         <option value="end">MOD_PRETTYMASTHEAD_RIGHT</option>
                     </field>
+                    <field
+                            name="defaulttitlevisibility"
+                            type="radio"
+                            default=""
+                            label="MOD_PRETTYMASTHEAD_FIELD_DEFAULTTITLEVISBILITY_LABEL"
+                            description="MOD_PRETTYMASTHEAD_FIELD_DEFAULTTITLEVISBILITY_DESC"
+                            class="btn-group"
+                    >
+                        <option value="">MOD_PRETTYMASTHEAD_VISBILITY_NOHIDE</option>
+                        <option value="sm">MOD_PRETTYMASTHEAD_VISIBILITY_HIDEXS</option>
+                        <option value="md">MOD_PRETTYMASTHEAD_VISIBILITY_HIDESM</option>
+                        <option value="lg">MOD_PRETTYMASTHEAD_VISIBILITY_HIDEMD</option>
+                    </field>
+                    <field
+                            name="defaultdescriptionvisibility"
+                            type="radio"
+                            default=""
+                            label="MOD_PRETTYMASTHEAD_FIELD_DEFAULTDESCRIPTIONVISBILITY_LABEL"
+                            description="MOD_PRETTYMASTHEAD_FIELD_DEFAULTDESCRIPTIONVISBILITY_DESC"
+                            class="btn-group"
+                    >
+                        <option value="">MOD_PRETTYMASTHEAD_VISBILITY_NOHIDE</option>
+                        <option value="sm">MOD_PRETTYMASTHEAD_VISIBILITY_HIDEXS</option>
+                        <option value="md">MOD_PRETTYMASTHEAD_VISIBILITY_HIDESM</option>
+                        <option value="lg">MOD_PRETTYMASTHEAD_VISIBILITY_HIDEMD</option>
+                    </field>
                 </fieldset>
                 <fieldset name="menumasthead" label="MOD_PRETTYMASTHEAD_FIELDSET_MENUMASTHEADS_LABEL">
                     <field
@@ -240,6 +266,32 @@
                                 <option value="start">MOD_PRETTYMASTHEAD_LEFT</option>
                                 <option value="center">MOD_PRETTYMASTHEAD_CENTER</option>
                                 <option value="end">MOD_PRETTYMASTHEAD_RIGHT</option>
+                            </field>
+                            <field
+                                    name="mastheadtitlevisibility"
+                                    type="radio"
+                                    default=""
+                                    label="MOD_PRETTYMASTHEAD_FIELD_TITLEVISBILITY_LABEL"
+                                    description="MOD_PRETTYMASTHEAD_FIELD_TITLEVISBILITY_DESC"
+                                    class="btn-group"
+                            >
+                                <option value="">MOD_PRETTYMASTHEAD_VISBILITY_NOHIDE</option>
+                                <option value="sm">MOD_PRETTYMASTHEAD_VISIBILITY_HIDEXS</option>
+                                <option value="md">MOD_PRETTYMASTHEAD_VISIBILITY_HIDESM</option>
+                                <option value="lg">MOD_PRETTYMASTHEAD_VISIBILITY_HIDEMD</option>
+                            </field>
+                            <field
+                                    name="mastheaddescriptionvisibility"
+                                    type="radio"
+                                    default=""
+                                    label="MOD_PRETTYMASTHEAD_FIELD_DESCRIPTIONVISBILITY_LABEL"
+                                    description="MOD_PRETTYMASTHEAD_FIELD_DESCRIPTIONVISBILITY_DESC"
+                                    class="btn-group"
+                            >
+                                <option value="">MOD_PRETTYMASTHEAD_VISBILITY_NOHIDE</option>
+                                <option value="sm">MOD_PRETTYMASTHEAD_VISIBILITY_HIDEXS</option>
+                                <option value="md">MOD_PRETTYMASTHEAD_VISIBILITY_HIDESM</option>
+                                <option value="lg">MOD_PRETTYMASTHEAD_VISIBILITY_HIDEMD</option>
                             </field>
                         </form>
                     </field>

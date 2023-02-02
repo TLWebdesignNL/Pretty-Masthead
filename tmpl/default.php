@@ -38,14 +38,18 @@ use Joomla\CMS\HTML\HTMLHelper;
             >
                 <<?php echo $masthead['titletag']; ?> class="title">
                     <span
-                            class="<?php echo $masthead['titleclass']; ?>"
+                            class="<?php echo $masthead['titleclass']; ?>
+                                   <?php echo ($masthead['titlevisibility'] !="") ? "d-none d-".$masthead['titlevisibility']."-block" : "" ; ?>
+                            "
                             style="-webkit-box-decoration-break:clone;box-decoration-break:clone;"
                     >
                         <?php echo $masthead['title']; ?>
                     </span>
                 </<?php echo $masthead['titletag']; ?>>
                 <?php if (!empty($masthead['description'])) : ?>
-                    <div class="description mt-sm-2">
+                    <div class="description mt-sm-2
+                                <?php echo ($masthead['descriptionvisibility'] !="") ? "d-none d-".$masthead['descriptionvisibility']."-block" : "" ; ?>
+                    ">
                         <span
                                 class="<?php echo $masthead['descriptionclass']; ?>"
                                 style="-webkit-box-decoration-break:clone;box-decoration-break:clone;"
