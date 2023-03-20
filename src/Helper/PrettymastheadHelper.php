@@ -126,7 +126,7 @@ class PrettymastheadHelper
     {
         if ($input->get('option') === 'com_content' && $input->get('view') === 'article') {
             // Save all the data you need to return
-            $items = new stdClass();
+            $items = new \stdClass();
 
             // Get the article ID
             $articleId = $app->input->getInt('id');
