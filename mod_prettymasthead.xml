@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <extension type="module" client="site" method="upgrade">
     <name>MOD_PRETTYMASTHEAD</name>
-    <creationDate>07-26-2022</creationDate>
+    <creationDate>10-28-2023</creationDate>
     <author>Tom van der Laan</author>
     <authorEmail>info@tlwebdesign.nl</authorEmail>
     <authorUrl>https://tlwebdesign.nl</authorUrl>
     <copyright>TLWebdesign</copyright>
     <license>GNU General Public License version 2 or later; see LICENSE.txt</license>
-    <version>0.5.1</version>
+    <version>1.0.0</version>
     <description>MOD_PRETTYMASTHEAD_XML_DESCRIPTION</description>
     <scriptfile>script.php</scriptfile>
     <namespace path="src">TlwebNamespace\Module\Prettymasthead</namespace>
@@ -88,11 +88,22 @@
                         description="MOD_PRETTYMASTHEAD_FIELD_DESCSOURCE_DESC"
                 >
                     <option value="article" checked="true">MOD_PRETTYMASTHEAD_FIELD_DESCSOURCE_ARTICLE</option>
-                    <option value="note">MOD_PRETTYMASTHEAD_FIELD_DESCSOURCE_NOTE</option>
                     <option value="imagealt">MOD_PRETTYMASTHEAD_FIELD_DESCSOURCE_IMAGEALT</option>
                     <option value="imagecaption">MOD_PRETTYMASTHEAD_FIELD_DESCSOURCE_IMAGECAPTION</option>
                     <option value="pagetitle">MOD_PRETTYMASTHEAD_FIELD_DESCSOURCE_PAGETITLE</option>
                     <option value="metadesc">MOD_PRETTYMASTHEAD_FIELD_DESCSOURCE_METADESC</option>
+                </field>
+                <field
+                        name="imagepriority"
+                        type="radio"
+                        default="intro"
+                        label="MOD_PRETTYMASTHEAD_FIELD_IMAGEPRIORITY_LABEL"
+                        description="MOD_PRETTYMASTHEAD_FIELD_IMAGEPRIORITY_DESC"
+                        class="btn-group"
+                        required="true"
+                >
+                    <option value="intro">MOD_PRETTYMASTHEAD_INTROIMAGE</option>
+                    <option value="full">MOD_PRETTYMASTHEAD_FULLIMAGE</option>
                 </field>
             </fieldset>
             <fieldset name="mastheads" label="MOD_PRETTYMASTHEAD_FIELDSET_MASTHEADS_LABEL">
@@ -350,4 +361,5 @@
             https://raw.githubusercontent.com/TLWebdesign/Pretty-Masthead/main/updates.xml
         </server>
     </updateservers>
+    <changelogurl>https://raw.githubusercontent.com/TLWebdesign/Pretty-Masthead/main/changelog.xml</changelogurl>
 </extension>

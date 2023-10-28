@@ -1,0 +1,53 @@
+<changelogs>
+    <changelog>
+        <element>mod_prettymasthead</element>
+        <type>module</type>
+        <version>1.0.0</version>
+        <addition>
+            <item>Joomla Changelog Feature</item>
+            <item>Ability to set article image priority to intro image or full article image.</item>
+        </addition>
+        <remove>
+            <item>Note option has been removed from masthead description source. This never worked.</item>
+        </remove>
+    </changelog>
+    <changelog>
+        <element>mod_prettymasthead</element>
+        <type>module</type>
+        <version>0.5.1</version>
+        <fix>
+            <item>Fixed a bug with php 8 and the way i called stdClass in the helper.</item>
+        </fix>
+    </changelog>
+    <changelog>
+        <element>mod_prettymasthead</element>
+        <type>module</type>
+        <version>0.5.0</version>
+        <addition>
+            <item>I've added a new feature! It is now possible to hide the title and/or description for your mastheads
+                on xs, sm and md sized screens.
+            </item>
+        </addition>
+    </changelog>
+    <changelog>
+        <element>mod_prettymasthead</element>
+        <type>module</type>
+        <version>0.4.0</version>
+        <addition>
+            <item>ability to add your own class to main div</item>
+            <item>option to set min-height</item>
+            <item>option to set max-height</item>
+            <item>option to define what is used for description when blog layout -> single article is viewed.</item>
+        </addition>
+    </changelog>
+    <changelog>
+        <element>mod_prettymasthead</element>
+        <type>module</type>
+        <version>0.3.3</version>
+        <addition>
+            <item>I've added a missing option to set the max length of the description text. This is needed because we
+                take the article text as description in the single article view on a blog layout.
+            </item>
+        </addition>
+    </changelog>
+</changelogs>

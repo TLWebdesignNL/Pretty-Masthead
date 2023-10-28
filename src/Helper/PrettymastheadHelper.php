@@ -34,7 +34,7 @@ class PrettymastheadHelper
      *
      * @return array
      */
-    public static function getMasthead($mastheads, $defaultmasthead, $descLength, $descSource): array
+    public static function getMasthead($mastheads, $defaultmasthead, $descLength, $descSource, $imagePriority): array
     {
         $app   = Factory::getApplication();
         $input = $app->input;
@@ -72,7 +72,7 @@ class PrettymastheadHelper
 
                     if ($activeMenuQuery['view'] == "category") {
                         // TRY TO GRAB ARTICLE
-                        $article = self::getArticle($app, $input, $descSource);
+                        $article = self::getArticle($app, $input, $descSource, $imagePriority);
 
                         if (isset($article->image) && !empty($article->image)) {
                             $mastheadArray['image'] = $article->image;
@@ -122,7 +122,7 @@ class PrettymastheadHelper
      *
      * @return false|object
      */
-    public static function getArticle($app, $input, $descSource)
+    public static function getArticle($app, $input, $descSource, $imagePriority)
     {
         if ($input->get('option') === 'com_content' && $input->get('view') === 'article') {
             // Save all the data you need to return
@@ -148,6 +148,9 @@ class PrettymastheadHelper
             $images             = json_decode($article->images);
             $items->title       = $article->title;
             $items->image       = ($images->image_intro) ? : $images->image_fulltext;
+            if ($imagePriority && $imagePriority == "full") {
+                $items->image       = ($images->image_fulltext) ? : $images->image_intro;
+            }
             switch ($descSource) {
                 case "article":
                     $items->description = strip_tags(str_replace('</p>', ' ', $article->introtext));

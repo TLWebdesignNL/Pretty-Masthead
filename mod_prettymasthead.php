@@ -19,6 +19,7 @@ $mainDivClass = $params->get('maindivclass');
 $minHeight = $params->get('minheight');
 $maxHeight = $params->get('maxheight');
 $descSource = $params->get('descsource');
+$imagePriority = $params->get('imagepriority');
 $defaultmasthead['image'] = $params->get('defaultmastheadimage');
 $defaultmasthead['title'] = $params->get('defaultmastheadtitle');
 $defaultmasthead['description'] = $params->get('defaultmastheaddescription');
@@ -29,5 +30,5 @@ $defaultmasthead['descriptionclass'] = $params->get('defaultmastheaddescriptionc
 $defaultmasthead['titlevisibility'] = $params->get('defaulttitlevisibility');
 $defaultmasthead['descriptionvisibility'] = $params->get('defaultdescriptionvisibility');
 
-$masthead  = PrettymastheadHelper::getMasthead($mastheads, $defaultmasthead, $descLength, $descSource);
+$masthead  = PrettymastheadHelper::getMasthead($mastheads, $defaultmasthead, $descLength, $descSource, $imagePriority);
 require ModuleHelper::getLayoutPath('mod_prettymasthead', $params->get('layout', 'default'));
