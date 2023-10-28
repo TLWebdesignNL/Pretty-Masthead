@@ -28,11 +28,11 @@ class PrettymastheadHelper
      * Retrieves masthead data based on menu item specific configurations, default settings,
      * and potentially the current article if within a category view.
      *
-     * @param   object   $mastheads         An object containing menu-item specific mastheads.
-     * @param   object   $defaultmasthead   An object containing default masthead settings.
-     * @param   int      $descLength        Maximum length of the description.
-     * @param   string   $descSource        Source of the description (article, note, imagealt, imagecaption, pagetitle, metadesc).
-     * @param   string   $imagePriority     Priority of image source (intro, full).
+     * @param   object  $mastheads        An object containing menu-item specific mastheads.
+     * @param   object  $defaultmasthead  An object containing default masthead settings.
+     * @param   int     $descLength       Maximum length of the description.
+     * @param   string  $descSource       Source of the description (article, note, imagealt, imagecaption, pagetitle, metadesc).
+     * @param   string  $imagePriority    Priority of image source (intro, full).
      *
      * @return  array    $mastheadArray     An associative array containing masthead data (title, image, description, etc.).
      *
@@ -45,33 +45,34 @@ class PrettymastheadHelper
         $input = $app->input;
 
         $itemId        = $input->get('Itemid', '', 'INT');
-        $mastheadArray = self::setMastheadDefaults($defaultmasthead);
+        $mastheadArray['image']            = (isset($defaultmasthead['image'])) ? $defaultmasthead['image'] : '';
+        $mastheadArray['title']            = (isset($defaultmasthead['title'])) ? $defaultmasthead['title'] : '';
+        $mastheadArray['description']      = (isset($defaultmasthead['description'])) ? $defaultmasthead['description'] : '';
+        $mastheadArray['position']         = (isset($defaultmasthead['position'])) ? $defaultmasthead['position'] : '';
+        $mastheadArray['titletag']         = (isset($defaultmasthead['titletag'])) ? $defaultmasthead['titletag'] : '';
+        $mastheadArray['titleclass']       = (isset($defaultmasthead['titleclass'])) ? $defaultmasthead['titleclass'] : '';
+        $mastheadArray['descriptionclass'] = (isset($defaultmasthead['descriptionclass'])) ? $defaultmasthead['descriptionclass'] : '';
+        $mastheadArray['titlevisibility'] = (isset($defaultmasthead['titlevisibility'])) ? $defaultmasthead['titlevisibility'] : '';
+        $mastheadArray['descriptionvisibility'] = (isset($defaultmasthead['descriptionvisibility'])) ? $defaultmasthead['descriptionvisibility'] : '';
 
         // LOOP THROUGH MENU ITEM SPECIFIC MASTHEADS
         if (isset($mastheads) && is_object($mastheads)) {
             foreach ($mastheads as $m) {
                 if (!empty($itemId) && $itemId == $m->mastheadmenuitem) {
-                    $mastheadArray = self::setMastheadDefaults($m);
+                    self::updateMastheadArray($m,$mastheadArray);
 
                     // GET ACTIVE MENU TO CHECK IF WE HAVE CATEGORY VIEW AND ONLY THEN TRY TO GET ARTICLE
                     $activeMenuQuery = $app->getMenu()->getActive()->query;
-
                     if ($activeMenuQuery['view'] == "category") {
                         // TRY TO GRAB ARTICLE
                         $article = self::getArticle($app, $input, $descSource, $imagePriority);
-
-                        if (isset($article->image) && !empty($article->image)) {
-                            $mastheadArray['image'] = $article->image;
-                        }
-
-                        if (isset($article->title) && !empty($article->title)) {
-                            $mastheadArray['title'] = $article->title;
-                        }
-
-                        if (isset($article->description) && !empty($article->description)) {
-                            $mastheadArray['description'] = $article->description;
-                        }
+                        self::updateMastheadArray($article, $mastheadArray);
                     }
+                } else {
+                    // IF ITEM ID DOES NOT MATCH MASTHEADMENUITEM THEN TRY TO USE ARTICLE ITEM CONTENT
+                    // THIS IS MAINLY USED WHEN YOU HAVE MENU ITEMS SET FOR CATEGORY ARTICLES.
+                    $article = self::getArticle($app, $input, $descSource, $imagePriority);
+                    self::updateMastheadArray($article, $mastheadArray);
                 }
             }
         }
@@ -93,45 +94,46 @@ class PrettymastheadHelper
 
         // Truncate description if descLength is set
         if (isset($descLength) && !empty($descLength)) {
-            $mastheadArray['description'] = StringHelper::truncate($mastheadArray['description'], $descLength, true, true);
+            $mastheadArray['description'] = StringHelper::truncate(
+                $mastheadArray['description'],
+                $descLength,
+                true,
+                true
+            );
         }
 
         return $mastheadArray;
     }
 
     /**
-     * Set the default properties for a masthead array.
+     * Method to update the masthead array with data from a given object or array.
      *
-     * This method merges the source array with a predefined set of default values.
-     * It fills in any missing keys in the source array with these defaults.
+     * @param   mixed  $updateData      Data to update the masthead array, should be an object or an array.
+     * @param   array &$mastheadArray   Reference to the masthead array to be updated.
      *
-     * @param   array   $sourceArray  The source array containing the masthead properties.
+     * @return  void
      *
-     * @return  array   The masthead array filled with any missing default values.
-     *
-     * @since   V1.0.0
+     * @since   1.0.0
      */
 
-    private static function setMastheadDefaults($sourceArray)
+    private static function updateMastheadArray($updateData, array &$mastheadArray)
     {
-        $defaults = [
-            'image' => '',
-            'title' => '',
-            'description' => '',
-            'position' => '',
-            'titletag' => '',
-            'titleclass' => '',
-            'descriptionclass' => '',
-            'titlevisibility' => '',
-            'descriptionvisibility' => ''
-        ];
-
-        foreach ($defaults as $key => $value) {
-            $defaults[$key] = $sourceArray[$key] ?? $value;
+        if (!$updateData) {
+            return;
         }
 
-        return $defaults;
+        $updateData = (array)$updateData;
+
+        foreach ($updateData as $key => $value) {
+            if (!empty($updateData[$key])) {
+                // strip "masthead" from $key string
+                $keyString = str_replace("masthead", "",$key);
+
+                $mastheadArray[$keyString] = $value;
+            }
+        }
     }
+
 
     /**
      * Retrieve an article based on the current request parameters.
@@ -139,10 +141,10 @@ class PrettymastheadHelper
      * This method retrieves an article from Joomla's com_content component,
      * applying various filters based on the parameters provided.
      *
-     * @param   \Joomla\CMS\Application\CMSApplication  $app           The application object.
-     * @param   \Joomla\Input\Input                    $input         The input object.
-     * @param   string                                 $descSource    The source of the description field ('article', 'note', etc.).
-     * @param   string                                 $imagePriority The image priority ('full' or 'intro').
+     * @param   \Joomla\CMS\Application\CMSApplication  $app            The application object.
+     * @param   \Joomla\Input\Input                     $input          The input object.
+     * @param   string                                  $descSource     The source of the description field ('article', etc.).
+     * @param   string                                  $imagePriority  The image priority ('full' or 'intro').
      *
      * @return  \stdClass|false  An object containing article details (title, image, and description), or false if the conditions are not met.
      *
@@ -168,22 +170,19 @@ class PrettymastheadHelper
             // Please, use any other filter as you need
             $model->setState('params', $appParams);
             $model->setState('filter.published', 1);
-            $model->setState('article.id', (int) $articleId);
+            $model->setState('article.id', (int)$articleId);
 
             $article = $model->getItem();
 
-            $images             = json_decode($article->images);
-            $items->title       = $article->title;
-            $items->image       = ($images->image_intro) ? : $images->image_fulltext;
+            $images       = json_decode($article->images);
+            $items->title = $article->title;
+            $items->image = ($images->image_intro) ?: $images->image_fulltext;
             if ($imagePriority && $imagePriority == "full") {
-                $items->image       = ($images->image_fulltext) ? : $images->image_intro;
+                $items->image = ($images->image_fulltext) ?: $images->image_intro;
             }
             switch ($descSource) {
                 case "article":
                     $items->description = strip_tags(str_replace('</p>', ' ', $article->introtext));
-                    break;
-                case "note":
-                    $items->description = $article->note;
                     break;
                 case "imagealt":
                     $items->description = $items->image;
