@@ -295,7 +295,7 @@
         <client>site</client>
     </update>
     <update>
-        <name>Pretty Masthead 1.0.1</name>
+        <name>Pretty Masthead</name>
         <description/>
         <element>mod_prettymasthead</element>
         <type>module</type>
@@ -309,7 +309,7 @@
         <tags>
             <tag>stable</tag>
         </tags>
-        <sha256></sha256>
+        <sha256>2b81352df87b917e80b206a25ede472c2c775c22b435b42584bb82610b3c1cb1</sha256>
         <maintainer>TLWebdesign</maintainer>
         <maintainerurl>https://www.tlwebdesign.nl/</maintainerurl>
         <section>Updates</section>
