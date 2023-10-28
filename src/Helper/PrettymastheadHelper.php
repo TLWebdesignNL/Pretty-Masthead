@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @package     Joomla.Site
+ * @package     TLWebdesign.Module
  * @subpackage  mod_prettymasthead
  *
  * @copyright   Copyright (C) 2022 TLWebdesign. All rights reserved.
@@ -25,47 +25,33 @@ use Joomla\CMS\HTML\Helpers\StringHelper;
 class PrettymastheadHelper
 {
     /**
-     * Retrieve Masthead
+     * Retrieves masthead data based on menu item specific configurations, default settings,
+     * and potentially the current article if within a category view.
      *
-     * @param $mastheads
-     * @param $defaultmasthead
-     * @param $descLength
-     * @param $descSource
+     * @param   object   $mastheads         An object containing menu-item specific mastheads.
+     * @param   object   $defaultmasthead   An object containing default masthead settings.
+     * @param   int      $descLength        Maximum length of the description.
+     * @param   string   $descSource        Source of the description (article, note, imagealt, imagecaption, pagetitle, metadesc).
+     * @param   string   $imagePriority     Priority of image source (intro, full).
      *
-     * @return array
+     * @return  array    $mastheadArray     An associative array containing masthead data (title, image, description, etc.).
+     *
+     * @since   0.1.0
      */
+
     public static function getMasthead($mastheads, $defaultmasthead, $descLength, $descSource, $imagePriority): array
     {
         $app   = Factory::getApplication();
         $input = $app->input;
 
         $itemId        = $input->get('Itemid', '', 'INT');
-        $mastheadArray = array();
-
-        // SET DEFAULT MASTHEAD (WILL BE OVERWRITTEN IF THERE IS A SPECIFIC MASTHEAD MATCHING THE ITEMID
-        $mastheadArray['image']            = (isset($defaultmasthead['image'])) ? $defaultmasthead['image'] : '';
-        $mastheadArray['title']            = (isset($defaultmasthead['title'])) ? $defaultmasthead['title'] : '';
-        $mastheadArray['description']      = (isset($defaultmasthead['description'])) ? $defaultmasthead['description'] : '';
-        $mastheadArray['position']         = (isset($defaultmasthead['position'])) ? $defaultmasthead['position'] : '';
-        $mastheadArray['titletag']         = (isset($defaultmasthead['titletag'])) ? $defaultmasthead['titletag'] : '';
-        $mastheadArray['titleclass']       = (isset($defaultmasthead['titleclass'])) ? $defaultmasthead['titleclass'] : '';
-        $mastheadArray['descriptionclass'] = (isset($defaultmasthead['descriptionclass'])) ? $defaultmasthead['descriptionclass'] : '';
-        $mastheadArray['titlevisibility'] = (isset($defaultmasthead['titlevisibility'])) ? $defaultmasthead['titlevisibility'] : '';
-        $mastheadArray['descriptionvisibility'] = (isset($defaultmasthead['descriptionvisibility'])) ? $defaultmasthead['descriptionvisibility'] : '';
+        $mastheadArray = self::setMastheadDefaults($defaultmasthead);
 
         // LOOP THROUGH MENU ITEM SPECIFIC MASTHEADS
         if (isset($mastheads) && is_object($mastheads)) {
             foreach ($mastheads as $m) {
                 if (!empty($itemId) && $itemId == $m->mastheadmenuitem) {
-                    $mastheadArray['image']            = (isset($m->mastheadimage)) ? $m->mastheadimage : '';
-                    $mastheadArray['title']            = (isset($m->mastheadtitle)) ? $m->mastheadtitle : '';
-                    $mastheadArray['description']      = (isset($m->mastheaddescription)) ? $m->mastheaddescription : '';
-                    $mastheadArray['position']         = (isset($m->mastheadposition)) ? $m->mastheadposition : '';
-                    $mastheadArray['titletag']         = (isset($m->mastheadtitletag)) ? $m->mastheadtitletag : '';
-                    $mastheadArray['titleclass']       = (isset($m->mastheadtitleclass)) ? $m->mastheadtitleclass : '';
-                    $mastheadArray['descriptionclass'] = (isset($m->mastheaddescriptionclass)) ? $m->mastheaddescriptionclass : '';
-                    $mastheadArray['titlevisibility'] = (isset($m->mastheadtitlevisibility)) ? $m->mastheadtitlevisibility : '';
-                    $mastheadArray['descriptionvisibility'] = (isset($m->mastheaddescriptionvisibility)) ? $m->mastheaddescriptionvisibility : '';
+                    $mastheadArray = self::setMastheadDefaults($m);
 
                     // GET ACTIVE MENU TO CHECK IF WE HAVE CATEGORY VIEW AND ONLY THEN TRY TO GET ARTICLE
                     $activeMenuQuery = $app->getMenu()->getActive()->query;
@@ -114,14 +100,55 @@ class PrettymastheadHelper
     }
 
     /**
-     * Retrieve Article
+     * Set the default properties for a masthead array.
      *
-     * @param $app
-     * @param $input
-     * @param $descSource
+     * This method merges the source array with a predefined set of default values.
+     * It fills in any missing keys in the source array with these defaults.
      *
-     * @return false|object
+     * @param   array   $sourceArray  The source array containing the masthead properties.
+     *
+     * @return  array   The masthead array filled with any missing default values.
+     *
+     * @since   V1.0.0
      */
+
+    private static function setMastheadDefaults($sourceArray)
+    {
+        $defaults = [
+            'image' => '',
+            'title' => '',
+            'description' => '',
+            'position' => '',
+            'titletag' => '',
+            'titleclass' => '',
+            'descriptionclass' => '',
+            'titlevisibility' => '',
+            'descriptionvisibility' => ''
+        ];
+
+        foreach ($defaults as $key => $value) {
+            $defaults[$key] = $sourceArray[$key] ?? $value;
+        }
+
+        return $defaults;
+    }
+
+    /**
+     * Retrieve an article based on the current request parameters.
+     *
+     * This method retrieves an article from Joomla's com_content component,
+     * applying various filters based on the parameters provided.
+     *
+     * @param   \Joomla\CMS\Application\CMSApplication  $app           The application object.
+     * @param   \Joomla\Input\Input                    $input         The input object.
+     * @param   string                                 $descSource    The source of the description field ('article', 'note', etc.).
+     * @param   string                                 $imagePriority The image priority ('full' or 'intro').
+     *
+     * @return  \stdClass|false  An object containing article details (title, image, and description), or false if the conditions are not met.
+     *
+     * @since   V0.3.0
+     */
+
     public static function getArticle($app, $input, $descSource, $imagePriority)
     {
         if ($input->get('option') === 'com_content' && $input->get('view') === 'article') {

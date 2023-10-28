@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @package     Joomla.Site
+ * @package     TLWebdesign.Module
  * @subpackage  mod_prettymasthead
  *
  * @copyright   Copyright (C) 2005 - 2020 TLWebdesign. All rights reserved.
