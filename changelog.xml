@@ -2,6 +2,14 @@
     <changelog>
         <element>mod_prettymasthead</element>
         <type>module</type>
+        <version>1.0.1</version>
+        <note>
+            <item>Nothing changed. Just testing the changelog functionality</item>
+        </note>
+     </changelog>
+    <changelog>
+        <element>mod_prettymasthead</element>
+        <type>module</type>
         <version>1.0.0</version>
         <addition>
             <item>Joomla Changelog Feature</item>
