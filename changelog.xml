@@ -2,6 +2,15 @@
     <changelog>
         <element>mod_prettymasthead</element>
         <type>module</type>
+        <version>1.0.2</version>
+        <fix>
+            <item>Masthead global settings for description "image alt" and "image caption" were ignored.</item>
+            <item>NL Language for new priority button.</item>
+        </fix>
+    </changelog>
+    <changelog>
+        <element>mod_prettymasthead</element>
+        <type>module</type>
         <version>1.0.1</version>
         <fix>
             <item>Menu item mastheads were overwritten by article content.</item>
