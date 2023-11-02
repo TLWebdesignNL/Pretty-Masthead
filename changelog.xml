@@ -11,6 +11,17 @@
         <element>mod_prettymasthead</element>
         <type>module</type>
         <version>1.0.0</version>
+        <fix>
+            <item>Menu item mastheads were overwritten by article content.</item>
+        </fix>
+        <change>
+            <item>Set the limit for menu mastheads from 10 to 50.</item>
+        </change>
+    </changelog>
+    <changelog>
+        <element>mod_prettymasthead</element>
+        <type>module</type>
+        <version>1.0.0</version>
         <addition>
             <item>Joomla Changelog Feature</item>
             <item>Ability to set article image priority to intro image or full article image.</item>
