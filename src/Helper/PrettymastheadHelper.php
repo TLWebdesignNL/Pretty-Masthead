@@ -57,8 +57,10 @@ class PrettymastheadHelper
 
         // LOOP THROUGH MENU ITEM SPECIFIC MASTHEADS
         if (isset($mastheads) && is_object($mastheads)) {
+            $mastheadFound = false;
             foreach ($mastheads as $m) {
                 if (!empty($itemId) && $itemId == $m->mastheadmenuitem) {
+                    $mastheadFound = true;
                     self::updateMastheadArray($m,$mastheadArray);
 
                     // GET ACTIVE MENU TO CHECK IF WE HAVE CATEGORY VIEW AND ONLY THEN TRY TO GET ARTICLE
@@ -68,7 +70,7 @@ class PrettymastheadHelper
                         $article = self::getArticle($app, $input, $descSource, $imagePriority);
                         self::updateMastheadArray($article, $mastheadArray);
                     }
-                } else {
+                } elseif (!$mastheadFound) {
                     // IF ITEM ID DOES NOT MATCH MASTHEADMENUITEM THEN TRY TO USE ARTICLE ITEM CONTENT
                     // THIS IS MAINLY USED WHEN YOU HAVE MENU ITEMS SET FOR CATEGORY ARTICLES.
                     $article = self::getArticle($app, $input, $descSource, $imagePriority);
