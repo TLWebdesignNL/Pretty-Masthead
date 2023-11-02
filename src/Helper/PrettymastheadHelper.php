@@ -179,18 +179,23 @@ class PrettymastheadHelper
             $images       = json_decode($article->images);
             $items->title = $article->title;
             $items->image = ($images->image_intro) ?: $images->image_fulltext;
+            $imagealt = ($images->image_intro_alt) ?: $images->image_fulltext_alt;
+            $imagecaption = ($images->image_intro_caption) ?: $images->image_fulltext_caption;
             if ($imagePriority && $imagePriority == "full") {
                 $items->image = ($images->image_fulltext) ?: $images->image_intro;
+                $imagealt = ($images->image_fulltext_alt) ?: $images->image_intro_alt;
+                $imagecaption = ($images->image_fulltext_caption) ?: $images->image_intro_caption;
             }
+
             switch ($descSource) {
                 case "article":
                     $items->description = strip_tags(str_replace('</p>', ' ', $article->introtext));
                     break;
                 case "imagealt":
-                    $items->description = $items->image;
+                    $items->description = $imagealt;
                     break;
                 case "imagecaption":
-                    $items->description = $items->image;
+                    $items->description = $imagecaption;
                     break;
                 case "pagetitle":
                     $items->description = $article->pagetitle;
