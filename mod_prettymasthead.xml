@@ -7,7 +7,7 @@
     <authorUrl>https://tlwebdesign.nl</authorUrl>
     <copyright>TLWebdesign</copyright>
     <license>GNU General Public License version 2 or later; see LICENSE.txt</license>
-    <version>1.0.2</version>
+    <version>1.0.3</version>
     <description>MOD_PRETTYMASTHEAD_XML_DESCRIPTION</description>
     <scriptfile>script.php</scriptfile>
     <namespace path="src">TlwebNamespace\Module\Prettymasthead</namespace>
@@ -181,6 +181,7 @@
                         <option value="sm">MOD_PRETTYMASTHEAD_VISIBILITY_HIDEXS</option>
                         <option value="md">MOD_PRETTYMASTHEAD_VISIBILITY_HIDESM</option>
                         <option value="lg">MOD_PRETTYMASTHEAD_VISIBILITY_HIDEMD</option>
+                        <option value="none">MOD_PRETTYMASTHEAD_VISIBILITY_HIDEALL</option>
                     </field>
                     <field
                             name="defaultdescriptionvisibility"
@@ -194,6 +195,7 @@
                         <option value="sm">MOD_PRETTYMASTHEAD_VISIBILITY_HIDEXS</option>
                         <option value="md">MOD_PRETTYMASTHEAD_VISIBILITY_HIDESM</option>
                         <option value="lg">MOD_PRETTYMASTHEAD_VISIBILITY_HIDEMD</option>
+                        <option value="none">MOD_PRETTYMASTHEAD_VISIBILITY_HIDEALL</option>
                     </field>
                 </fieldset>
                 <fieldset name="menumasthead" label="MOD_PRETTYMASTHEAD_FIELDSET_MENUMASTHEADS_LABEL">
@@ -290,6 +292,7 @@
                                 <option value="sm">MOD_PRETTYMASTHEAD_VISIBILITY_HIDEXS</option>
                                 <option value="md">MOD_PRETTYMASTHEAD_VISIBILITY_HIDESM</option>
                                 <option value="lg">MOD_PRETTYMASTHEAD_VISIBILITY_HIDEMD</option>
+                                <option value="none">MOD_PRETTYMASTHEAD_VISIBILITY_HIDEALL</option>
                             </field>
                             <field
                                     name="mastheaddescriptionvisibility"
@@ -303,6 +306,7 @@
                                 <option value="sm">MOD_PRETTYMASTHEAD_VISIBILITY_HIDEXS</option>
                                 <option value="md">MOD_PRETTYMASTHEAD_VISIBILITY_HIDESM</option>
                                 <option value="lg">MOD_PRETTYMASTHEAD_VISIBILITY_HIDEMD</option>
+                                <option value="none">MOD_PRETTYMASTHEAD_VISIBILITY_HIDEALL</option>
                             </field>
                         </form>
                     </field>

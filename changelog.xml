@@ -2,6 +2,14 @@
     <changelog>
         <element>mod_prettymasthead</element>
         <type>module</type>
+        <version>1.0.3</version>
+        <addition>
+            <item>Ability to hide title or description on all screen sizes.</item>
+        </addition>
+    </changelog>
+    <changelog>
+        <element>mod_prettymasthead</element>
+        <type>module</type>
         <version>1.0.2</version>
         <fix>
             <item>Masthead global settings for description "image alt" and "image caption" were ignored.</item>
