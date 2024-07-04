@@ -7,7 +7,7 @@
     <authorUrl>https://tlwebdesign.nl</authorUrl>
     <copyright>TLWebdesign</copyright>
     <license>GNU General Public License version 2 or later; see LICENSE.txt</license>
-    <version>1.0.3</version>
+    <version>1.0.4</version>
     <description>MOD_PRETTYMASTHEAD_XML_DESCRIPTION</description>
     <scriptfile>script.php</scriptfile>
     <namespace path="src">TlwebNamespace\Module\Prettymasthead</namespace>
@@ -197,6 +197,27 @@
                         <option value="lg">MOD_PRETTYMASTHEAD_VISIBILITY_HIDEMD</option>
                         <option value="none">MOD_PRETTYMASTHEAD_VISIBILITY_HIDEALL</option>
                     </field>
+                    <field
+                            name="defaultbuttontext"
+                            type="text"
+                            label="MOD_PRETTYMASTHEAD_FIELD_DEFAULTBUTTONTEXT_LABEL"
+                            description="MOD_PRETTYMASTHEAD_FIELD_DEFAULTBUTTONTEXT_DESC"
+                            default=""
+                    />
+                    <field
+                            name="defaultbuttonurl"
+                            type="text"
+                            label="MOD_PRETTYMASTHEAD_FIELD_DEFAULTBUTTONURL_LABEL"
+                            description="MOD_PRETTYMASTHEAD_FIELD_DEFAULTBUTTONURL_DESC"
+                            default=""
+                    />
+                    <field
+                            name="defaultbuttonclass"
+                            type="text"
+                            label="MOD_PRETTYMASTHEAD_FIELD_DEFAULTBUTTONCLASS_LABEL"
+                            description="MOD_PRETTYMASTHEAD_FIELD_DEFAULTBUTTONCLASS_DESC"
+                            default="btn-primary"
+                    />
                 </fieldset>
                 <fieldset name="menumasthead" label="MOD_PRETTYMASTHEAD_FIELDSET_MENUMASTHEADS_LABEL">
                     <field
@@ -308,6 +329,27 @@
                                 <option value="lg">MOD_PRETTYMASTHEAD_VISIBILITY_HIDEMD</option>
                                 <option value="none">MOD_PRETTYMASTHEAD_VISIBILITY_HIDEALL</option>
                             </field>
+                            <field
+                                    name="mastheadbuttontext"
+                                    type="text"
+                                    label="MOD_PRETTYMASTHEAD_FIELD_MASTHEADBUTTONTEXT_LABEL"
+                                    description="MOD_PRETTYMASTHEAD_FIELD_MASTHEADBUTTONTEXT_DESC"
+                                    default=""
+                            />
+                            <field
+                                    name="mastheadbuttonurl"
+                                    type="text"
+                                    label="MOD_PRETTYMASTHEAD_FIELD_MASTHEADBUTTONURL_LABEL"
+                                    description="MOD_PRETTYMASTHEAD_FIELD_MASTHEADBUTTONURL_DESC"
+                                    default=""
+                            />
+                            <field
+                                    name="mastheadbuttonclass"
+                                    type="text"
+                                    label="MOD_PRETTYMASTHEAD_FIELD_MASTHEADBUTTONCLASS_LABEL"
+                                    description="MOD_PRETTYMASTHEAD_FIELD_MASTHEADBUTTONCLASS_DESC"
+                                    default="btn-primary"
+                            />
                         </form>
                     </field>
                 </fieldset>

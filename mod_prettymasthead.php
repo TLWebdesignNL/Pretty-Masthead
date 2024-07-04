@@ -29,6 +29,9 @@ $defaultmasthead['titleclass'] = $params->get('defaultmastheadtitleclass');
 $defaultmasthead['descriptionclass'] = $params->get('defaultmastheaddescriptionclass');
 $defaultmasthead['titlevisibility'] = $params->get('defaulttitlevisibility');
 $defaultmasthead['descriptionvisibility'] = $params->get('defaultdescriptionvisibility');
+$defaultmasthead['buttontext'] = $params->get('defaultbuttontext');
+$defaultmasthead['buttonurl'] = $params->get('defaultbuttonurl');
+$defaultmasthead['buttonclass'] = $params->get('defaultbuttonclass');
 
 $masthead  = PrettymastheadHelper::getMasthead($mastheads, $defaultmasthead, $descLength, $descSource, $imagePriority);
 require ModuleHelper::getLayoutPath('mod_prettymasthead', $params->get('layout', 'default'));

@@ -44,16 +44,19 @@ class PrettymastheadHelper
         $app   = Factory::getApplication();
         $input = $app->input;
 
-        $itemId        = $input->get('Itemid', '', 'INT');
-        $mastheadArray['image']            = (isset($defaultmasthead['image'])) ? $defaultmasthead['image'] : '';
-        $mastheadArray['title']            = (isset($defaultmasthead['title'])) ? $defaultmasthead['title'] : '';
-        $mastheadArray['description']      = (isset($defaultmasthead['description'])) ? $defaultmasthead['description'] : '';
-        $mastheadArray['position']         = (isset($defaultmasthead['position'])) ? $defaultmasthead['position'] : '';
-        $mastheadArray['titletag']         = (isset($defaultmasthead['titletag'])) ? $defaultmasthead['titletag'] : '';
-        $mastheadArray['titleclass']       = (isset($defaultmasthead['titleclass'])) ? $defaultmasthead['titleclass'] : '';
-        $mastheadArray['descriptionclass'] = (isset($defaultmasthead['descriptionclass'])) ? $defaultmasthead['descriptionclass'] : '';
-        $mastheadArray['titlevisibility'] = (isset($defaultmasthead['titlevisibility'])) ? $defaultmasthead['titlevisibility'] : '';
+        $itemId                                 = $input->get('Itemid', '', 'INT');
+        $mastheadArray['image']                 = (isset($defaultmasthead['image'])) ? $defaultmasthead['image'] : '';
+        $mastheadArray['title']                 = (isset($defaultmasthead['title'])) ? $defaultmasthead['title'] : '';
+        $mastheadArray['description']           = (isset($defaultmasthead['description'])) ? $defaultmasthead['description'] : '';
+        $mastheadArray['position']              = (isset($defaultmasthead['position'])) ? $defaultmasthead['position'] : '';
+        $mastheadArray['titletag']              = (isset($defaultmasthead['titletag'])) ? $defaultmasthead['titletag'] : '';
+        $mastheadArray['titleclass']            = (isset($defaultmasthead['titleclass'])) ? $defaultmasthead['titleclass'] : '';
+        $mastheadArray['descriptionclass']      = (isset($defaultmasthead['descriptionclass'])) ? $defaultmasthead['descriptionclass'] : '';
+        $mastheadArray['titlevisibility']       = (isset($defaultmasthead['titlevisibility'])) ? $defaultmasthead['titlevisibility'] : '';
         $mastheadArray['descriptionvisibility'] = (isset($defaultmasthead['descriptionvisibility'])) ? $defaultmasthead['descriptionvisibility'] : '';
+        $mastheadArray['buttontext']            = (isset($defaultmasthead['buttontext'])) ? $defaultmasthead['buttontext'] : '';
+        $mastheadArray['buttonurl']             = (isset($defaultmasthead['buttonurl'])) ? $defaultmasthead['buttonurl'] : '';
+        $mastheadArray['buttonclass']           = (isset($defaultmasthead['buttonclass'])) ? $defaultmasthead['buttonclass'] : '';
 
         // LOOP THROUGH MENU ITEM SPECIFIC MASTHEADS
         if (isset($mastheads) && is_object($mastheads)) {
