@@ -11,56 +11,73 @@
 \defined('_JEXEC') or die;
 
 use Joomla\CMS\HTML\HTMLHelper;
+
+// Escape a value for HTML text and attribute context
+$e = static fn ($v): string => htmlspecialchars((string) $v, ENT_QUOTES, 'UTF-8');
+
+// Only real heading elements may be used as the title tag
+$titleTag = \in_array($masthead['titletag'], ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'], true) ? $masthead['titletag'] : 'h2';
+
+$minHeight = (int) $minHeight;
+$maxHeight = (int) $maxHeight;
 ?>
 <div class="pretty-masthead">
     <?php
     if ($masthead['image']->url != "") :
-    $width = $masthead['image']->attributes['width'];
-    $height = $masthead['image']->attributes['height'];
+    $width = (int) $masthead['image']->attributes['width'];
+    $height = (int) $masthead['image']->attributes['height'];
     $aspectRatio = 0.25;
 
-    if ($width != 0 && $height != 0) {
+    if ($width > 0 && $height > 0) {
         $aspectRatio = $height / $width;
     }
+
+    // Percent-encode characters that could end the quoted CSS url() string
+    $imageUrl = str_replace(
+        ['"', "'", '\\', '(', ')', ' ', "\n", "\r", "\t"],
+        ['%22', '%27', '%5C', '%28', '%29', '%20', '', '', ''],
+        (string) $masthead['image']->url
+    );
+
+    $style = '--aspect-ratio: ' . round($aspectRatio * 100) . '%;'
+        . ' --pm-image: url("' . $imageUrl . '");'
+        . ' background: var(--pm-image) center center / cover no-repeat;'
+        . ($minHeight > 0 ? ' min-height: ' . $minHeight . 'px;' : '')
+        . ($maxHeight > 0 ? ' max-height: ' . $maxHeight . 'px;' : '');
     ?>
-    <div class="ratio d-flex justify-content-<?php echo $masthead['position']; ?> align-items-center p-3 p-sm-5 <?php echo $mainDivClass; ?>"
-         style="
-                 --aspect-ratio: <?php echo round($aspectRatio * 100); ?>%;
-                 background:url('<?php echo $masthead['image']->url; ?>') center center / cover no-repeat;
-         <?php echo ($minHeight && $minHeight != 0) ? "min-height: ".$minHeight."px;" : ""; ?>
-         <?php echo ($maxHeight && $maxHeight != 0) ? "max-height: ".$maxHeight."px;" : ""; ?>
-                 "
+    <div class="ratio d-flex justify-content-<?php echo $e($masthead['position']); ?> align-items-center p-3 p-sm-5 <?php echo $e($mainDivClass); ?>"
+         style="<?php echo $e($style); ?>"
     >
         <div
-                class="content d-flex flex-column align-items-<?php echo $masthead['position']; ?>
+                class="content d-flex flex-column align-items-<?php echo $e($masthead['position']); ?>
                     w-auto h-auto position-relative text-white text-center"
         >
-            <<?php echo $masthead['titletag']; ?> class="title">
+            <<?php echo $titleTag; ?> class="title">
             <span
-                    class="<?php echo $masthead['titleclass']; ?>
-                                   <?php echo ($masthead['titlevisibility'] !="") ? "d-none d-".$masthead['titlevisibility']."-block" : "" ; ?>
+                    class="<?php echo $e($masthead['titleclass']); ?>
+                                   <?php echo ($masthead['titlevisibility'] != "") ? "d-none d-" . $e($masthead['titlevisibility']) . "-block" : ""; ?>
                             "
                     style="-webkit-box-decoration-break:clone;box-decoration-break:clone;"
             >
-                        <?php echo $masthead['title']; ?>
+                        <?php echo $e($masthead['title']); ?>
                     </span>
-        </<?php echo $masthead['titletag']; ?>>
+        </<?php echo $titleTag; ?>>
         <?php if (!empty($masthead['description'])) : ?>
             <div class="description mt-sm-2
-                                <?php echo ($masthead['descriptionvisibility'] !="") ? "d-none d-".$masthead['descriptionvisibility']."-block" : "" ; ?>
+                                <?php echo ($masthead['descriptionvisibility'] != "") ? "d-none d-" . $e($masthead['descriptionvisibility']) . "-block" : ""; ?>
                     ">
                         <span
-                                class="<?php echo $masthead['descriptionclass']; ?>"
+                                class="<?php echo $e($masthead['descriptionclass']); ?>"
                                 style="-webkit-box-decoration-break:clone;box-decoration-break:clone;"
                         >
-                            <?php echo $masthead['description']; ?>
+                            <?php echo $e($masthead['description']); ?>
                         </span>
             </div>
         <?php endif; ?>
         <?php if (!empty($masthead['buttontext'])) : ?>
             <div class="button mt-sm-2">
-                <a class="<?php echo $masthead['buttonclass']; ?>" href="<?php echo $masthead['buttonurl']; ?>">
-                    <?php echo $masthead['buttontext']; ?>
+                <a class="<?php echo $e($masthead['buttonclass']); ?>" href="<?php echo $e($masthead['buttonurl']); ?>">
+                    <?php echo $e($masthead['buttontext']); ?>
                 </a>
             </div>
         <?php endif; ?>

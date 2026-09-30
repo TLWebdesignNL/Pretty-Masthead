@@ -103,7 +103,7 @@ class PrettymastheadHelper
                 $mastheadArray['description'],
                 $descLength,
                 true,
-                true
+                false
             );
         }
 
@@ -192,7 +192,11 @@ class PrettymastheadHelper
 
             switch ($descSource) {
                 case "article":
-                    $items->description = strip_tags(str_replace('</p>', ' ', $article->introtext));
+                    // Plain text only: the layout escapes it, so decode entities and drop plugin tags like {loadmodule ...}
+                    $description        = strip_tags(str_replace('</p>', ' ', $article->introtext));
+                    $description        = html_entity_decode($description, ENT_QUOTES, 'UTF-8');
+                    $description        = preg_replace('/\{\/?[a-z][^{}]*\}/i', '', $description);
+                    $items->description = trim(preg_replace('/\s+/u', ' ', $description));
                     break;
                 case "imagealt":
                     $items->description = $imagealt;
