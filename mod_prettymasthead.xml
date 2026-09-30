@@ -19,6 +19,8 @@
         <filename>mod_prettymasthead.xml</filename>
     </files>
     <media folder="media" destination="mod_prettymasthead">
+        <folder>css</folder>
+        <filename>joomla.asset.json</filename>
         <filename>logo.svg</filename>
     </media>
     <config>

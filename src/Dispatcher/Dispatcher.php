@@ -38,6 +38,10 @@ class Dispatcher extends AbstractModuleDispatcher implements HelperFactoryAwareI
         $data   = parent::getLayoutData();
         $params = $data['params'];
 
+        $wa = $data['app']->getDocument()->getWebAssetManager();
+        $wa->getRegistry()->addExtensionRegistryFile('mod_prettymasthead');
+        $wa->useStyle('mod_prettymasthead.style');
+
         // The masthead depends on the menu item and the article being viewed, so cache it per page
         $cacheParams               = new \stdClass();
         $cacheParams->cachemode    = 'safeuri';

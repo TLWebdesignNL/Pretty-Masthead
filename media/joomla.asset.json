@@ -1,0 +1,14 @@
+{
+    "$schema": "https://developer.joomla.org/schemas/json-schema/web_assets.json",
+    "name": "mod_prettymasthead",
+    "version": "1.2.0",
+    "description": "Pretty Masthead module assets",
+    "license": "GPL-2.0-or-later",
+    "assets": [
+        {
+            "name": "mod_prettymasthead.style",
+            "type": "style",
+            "uri": "mod_prettymasthead/prettymasthead.css"
+        }
+    ]
+}

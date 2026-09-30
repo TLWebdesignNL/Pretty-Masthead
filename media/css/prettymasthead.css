@@ -1,0 +1,19 @@
+/**
+ * @package     TLWebdesign.Module
+ * @subpackage  mod_prettymasthead
+ *
+ * @copyright   Copyright (C) 2022 TLWebdesign. All rights reserved.
+ * @license     GNU General Public License version 2 or later; see LICENSE.txt
+ */
+
+/* The image URL is set per masthead in the --pm-image custom property */
+.pretty-masthead .ratio {
+    background: var(--pm-image) center center / cover no-repeat;
+}
+
+/* Keep the padding and background on every line when the title or description wraps */
+.pretty-masthead .title > span,
+.pretty-masthead .description > span {
+    -webkit-box-decoration-break: clone;
+    box-decoration-break: clone;
+}

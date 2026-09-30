@@ -10,7 +10,7 @@
 
 \defined('_JEXEC') or die;
 
-use Joomla\CMS\HTML\HTMLHelper;
+// The static styles are in media/mod_prettymasthead/css/prettymasthead.css, loaded by the Dispatcher
 
 // Escape a value for HTML text and attribute context
 $e = static fn ($v): string => htmlspecialchars((string) $v, ENT_QUOTES, 'UTF-8');
@@ -50,7 +50,6 @@ $maxHeight = (int) $maxHeight;
     $ratio = round($aspectRatio * 100) . '%';
     $style = '--bs-aspect-ratio: ' . $ratio . '; --aspect-ratio: ' . $ratio . ';'
         . ' --pm-image: url(' . $imageUrl . ');'
-        . ' background: var(--pm-image) center center / cover no-repeat;'
         . ($minHeight > 0 ? ' min-height: ' . $minHeight . 'px;' : '')
         . ($maxHeight > 0 ? ' max-height: ' . $maxHeight . 'px;' : '');
     ?>
@@ -63,10 +62,7 @@ $maxHeight = (int) $maxHeight;
         >
         <?php if ($showTitle) : ?>
             <<?php echo $titleTag; ?> class="title <?php echo $e($masthead['titlevisibilityclass']); ?>">
-                <span
-                        class="<?php echo $e($masthead['titleclass']); ?>"
-                        style="-webkit-box-decoration-break:clone;box-decoration-break:clone;"
-                >
+                <span class="<?php echo $e($masthead['titleclass']); ?>">
                     <?php echo $e($masthead['title']); ?>
                 </span>
             </<?php echo $titleTag; ?>>
@@ -75,10 +71,7 @@ $maxHeight = (int) $maxHeight;
             <div class="description mt-sm-2
                                 <?php echo $e($masthead['descriptionvisibilityclass']); ?>
                     ">
-                        <span
-                                class="<?php echo $e($masthead['descriptionclass']); ?>"
-                                style="-webkit-box-decoration-break:clone;box-decoration-break:clone;"
-                        >
+                        <span class="<?php echo $e($masthead['descriptionclass']); ?>">
                             <?php echo $e($masthead['description']); ?>
                         </span>
             </div>
