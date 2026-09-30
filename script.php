@@ -11,8 +11,11 @@
 // No direct access to this file
 \defined('_JEXEC') or die;
 
+use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Log\Log;
+use Joomla\Database\DatabaseInterface;
+use Joomla\Database\ParameterType;
 
 /**
  * Script file of Prettymasthead module
@@ -69,7 +72,64 @@ class mod_prettymastheadInstallerScript
     {
         echo Text::_('MOD_PRETTYMASTHEAD_INSTALLERSCRIPT_UPDATE');
 
+        $this->migrateCacheMode();
+
         return true;
+    }
+
+    /**
+     * Switch existing module instances to the page-aware "safeuri" cache mode.
+     *
+     * The hidden cachemode field posts its stored value back, so re-saving a module
+     * would keep the old "static" mode, which served one masthead on every page.
+     *
+     * @return  void
+     *
+     * @since   1.1.0
+     */
+    private function migrateCacheMode(): void
+    {
+        try {
+            $db     = Factory::getContainer()->get(DatabaseInterface::class);
+            $module = 'mod_prettymasthead';
+
+            // createQuery() exists from Joomla 5, getQuery(true) is deprecated there
+            $query = method_exists($db, 'createQuery') ? $db->createQuery() : $db->getQuery(true);
+            $query->select($db->quoteName(['id', 'params']))
+                ->from($db->quoteName('#__modules'))
+                ->where($db->quoteName('module') . ' = :module')
+                ->bind(':module', $module);
+
+            $rows = $db->setQuery($query)->loadObjectList();
+
+            foreach ($rows as $row) {
+                $params = json_decode((string) $row->params);
+
+                if (!$params instanceof \stdClass || ($params->cachemode ?? '') === 'safeuri') {
+                    continue;
+                }
+
+                $params->cachemode = 'safeuri';
+                $json              = json_encode($params);
+                $id                = (int) $row->id;
+
+                if ($json === false) {
+                    continue;
+                }
+
+                $update = method_exists($db, 'createQuery') ? $db->createQuery() : $db->getQuery(true);
+                $update->update($db->quoteName('#__modules'))
+                    ->set($db->quoteName('params') . ' = :params')
+                    ->where($db->quoteName('id') . ' = :id')
+                    ->bind(':params', $json)
+                    ->bind(':id', $id, ParameterType::INTEGER);
+
+                $db->setQuery($update)->execute();
+            }
+        } catch (\Throwable $e) {
+            // Never block the update over this; affected modules keep the old cache mode until it is fixed by hand
+            Log::add(Text::sprintf('MOD_PRETTYMASTHEAD_INSTALLERSCRIPT_CACHEMODE_FAILED', $e->getMessage()), Log::WARNING, 'jerror');
+        }
     }
 
     /**

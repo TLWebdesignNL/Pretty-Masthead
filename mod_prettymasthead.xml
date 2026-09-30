@@ -410,9 +410,9 @@
                 <field
                         name="cachemode"
                         type="hidden"
-                        default="static"
+                        default="safeuri"
                 >
-                    <option value="static"></option>
+                    <option value="safeuri"></option>
                 </field>
             </fieldset>
 
