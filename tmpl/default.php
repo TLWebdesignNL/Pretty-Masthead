@@ -18,6 +18,12 @@ $e = static fn ($v): string => htmlspecialchars((string) $v, ENT_QUOTES, 'UTF-8'
 // The helper only returns h1-h6 here
 $titleTag = $masthead['titletag'];
 
+// No heading at all when the title is always hidden or empty, so no empty heading ends up in the outline
+$showTitle = $masthead['titlevisibility'] !== 'none' && trim((string) $masthead['title']) !== '';
+
+// Bootstrap 5 variant classes like btn-primary only work together with the base btn class
+$buttonClasses = array_unique(array_merge(['btn'], preg_split('/\s+/', trim((string) $masthead['buttonclass']), -1, PREG_SPLIT_NO_EMPTY)));
+
 $minHeight = (int) $minHeight;
 $maxHeight = (int) $maxHeight;
 ?>
@@ -40,7 +46,9 @@ $maxHeight = (int) $maxHeight;
         preg_replace('/[\x00-\x1F\x7F]/', '', (string) $masthead['image']->url)
     );
 
-    $style = '--aspect-ratio: ' . round($aspectRatio * 100) . '%;'
+    // --bs-aspect-ratio for Bootstrap 5, --aspect-ratio for Cassiopeia
+    $ratio = round($aspectRatio * 100) . '%';
+    $style = '--bs-aspect-ratio: ' . $ratio . '; --aspect-ratio: ' . $ratio . ';'
         . ' --pm-image: url(' . $imageUrl . ');'
         . ' background: var(--pm-image) center center / cover no-repeat;'
         . ($minHeight > 0 ? ' min-height: ' . $minHeight . 'px;' : '')
@@ -53,16 +61,16 @@ $maxHeight = (int) $maxHeight;
                 class="content d-flex flex-column align-items-<?php echo $e($masthead['position']); ?>
                     w-auto h-auto position-relative text-white text-center"
         >
-            <<?php echo $titleTag; ?> class="title">
-            <span
-                    class="<?php echo $e($masthead['titleclass']); ?>
-                                   <?php echo $e($masthead['titlevisibilityclass']); ?>
-                            "
-                    style="-webkit-box-decoration-break:clone;box-decoration-break:clone;"
-            >
-                        <?php echo $e($masthead['title']); ?>
-                    </span>
-        </<?php echo $titleTag; ?>>
+        <?php if ($showTitle) : ?>
+            <<?php echo $titleTag; ?> class="title <?php echo $e($masthead['titlevisibilityclass']); ?>">
+                <span
+                        class="<?php echo $e($masthead['titleclass']); ?>"
+                        style="-webkit-box-decoration-break:clone;box-decoration-break:clone;"
+                >
+                    <?php echo $e($masthead['title']); ?>
+                </span>
+            </<?php echo $titleTag; ?>>
+        <?php endif; ?>
         <?php if (!empty($masthead['description'])) : ?>
             <div class="description mt-sm-2
                                 <?php echo $e($masthead['descriptionvisibilityclass']); ?>
@@ -77,7 +85,7 @@ $maxHeight = (int) $maxHeight;
         <?php endif; ?>
         <?php if (!empty($masthead['buttontext'])) : ?>
             <div class="button mt-sm-2">
-                <a class="<?php echo $e($masthead['buttonclass']); ?>" href="<?php echo $e($masthead['buttonurl']); ?>">
+                <a class="<?php echo $e(implode(' ', $buttonClasses)); ?>" href="<?php echo $e($masthead['buttonurl']); ?>">
                     <?php echo $e($masthead['buttontext']); ?>
                 </a>
             </div>
