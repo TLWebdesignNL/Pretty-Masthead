@@ -206,7 +206,11 @@
                     />
                     <field
                             name="defaultbuttonurl"
-                            type="text"
+                            type="url"
+                            filter="url"
+                            validate="url"
+                            schemes="http,https"
+                            relative="true"
                             label="MOD_PRETTYMASTHEAD_FIELD_DEFAULTBUTTONURL_LABEL"
                             description="MOD_PRETTYMASTHEAD_FIELD_DEFAULTBUTTONURL_DESC"
                             default=""
@@ -338,7 +342,11 @@
                             />
                             <field
                                     name="mastheadbuttonurl"
-                                    type="text"
+                                    type="url"
+                                    filter="url"
+                                    validate="url"
+                                    schemes="http,https"
+                                    relative="true"
                                     label="MOD_PRETTYMASTHEAD_FIELD_MASTHEADBUTTONURL_LABEL"
                                     description="MOD_PRETTYMASTHEAD_FIELD_MASTHEADBUTTONURL_DESC"
                                     default=""

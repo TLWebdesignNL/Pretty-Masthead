@@ -12,6 +12,7 @@ namespace TlwebNamespace\Module\Prettymasthead\Site\Helper;
 
 use Joomla\CMS\Factory;
 use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Router\Route;
 use Joomla\CMS\Uri\Uri;
 use Joomla\CMS\HTML\Helpers\StringHelper;
 
@@ -107,7 +108,51 @@ class PrettymastheadHelper
             );
         }
 
+        $mastheadArray['buttonurl'] = self::getButtonUrl((string) $mastheadArray['buttonurl']);
+
         return $mastheadArray;
+    }
+
+    /**
+     * Makes the button URL safe for use in an href: only http(s) and site-relative URLs are kept,
+     * and internal non-SEF links are routed.
+     *
+     * @param   string  $url  The button URL as stored in the module params.
+     *
+     * @return  string  The URL to link to (not HTML-escaped), or an empty string if it is not allowed.
+     *
+     * @since   1.1.0
+     */
+
+    private static function getButtonUrl(string $url): string
+    {
+        $url = trim($url);
+
+        if ($url === '') {
+            return '';
+        }
+
+        // Browsers ignore whitespace and control characters inside a scheme ("java\tscript:"), so ignore them here too.
+        // A scheme is whatever comes before a ":" that appears before any "/", "?" or "#".
+        $compact = preg_replace('/[\x00-\x20]+/', '', $url);
+
+        if (preg_match('~^([^/?#]*?):~', $compact, $matches) && !\in_array(strtolower($matches[1]), ['http', 'https'], true)) {
+            return '';
+        }
+
+        // The url filter saves "index.php?..." as "<site path>/index.php?...", so strip the site path again
+        $rootPath = Uri::root(true);
+
+        if (str_starts_with($url, $rootPath . '/index.php')) {
+            $url = substr($url, \strlen($rootPath) + 1);
+        }
+
+        if (str_starts_with($url, 'index.php')) {
+            // Not XHTML-encoded: the layout escapes the href
+            $url = Route::_($url, false);
+        }
+
+        return $url;
     }
 
     /**
