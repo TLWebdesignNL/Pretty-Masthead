@@ -5,6 +5,10 @@ on:
     tags:
       - 'V*'
 
+env:
+  # Joomla versions offered this release, as a regex matched against JVERSION.
+  TARGETPLATFORM: '(4|5|6)\..*'
+
 jobs:
   update-xml:
     runs-on: ubuntu-latest
@@ -40,6 +44,7 @@ jobs:
           VERSION: ${{ steps.vars.outputs.version }}
           TAG: ${{ steps.vars.outputs.tag }}
           SHA256: ${{ steps.sha256.outputs.value }}
+          TARGETPLATFORM: ${{ env.TARGETPLATFORM }}
         run: |
           python3 - <<'EOF'
           import re, os
@@ -48,6 +53,10 @@ jobs:
           tag     = os.environ["TAG"]
           sha256  = os.environ["SHA256"]
           repo    = os.environ["GITHUB_REPOSITORY"]
+          platform = os.environ["TARGETPLATFORM"]
+
+          if not re.fullmatch(r'[a-f0-9]{64}', sha256):
+              raise SystemExit(f"Invalid SHA256 for release zip: {sha256!r}")
 
           with open("updates.xml", "r") as f:
               content = f.read()
@@ -65,7 +74,7 @@ jobs:
           # Get old tag from last block's download URL to swap it out
           old_tag_match = re.search(r'archive/refs/tags/([^\s<"]+)', last)
           if old_tag_match:
-              old_tag = old_tag_match.group(1).rstrip('.zip')
+              old_tag = old_tag_match.group(1).removesuffix('.zip')
               new_block = last.replace(
                   f"archive/refs/tags/{old_tag}",
                   f"archive/refs/tags/{tag}"
@@ -91,8 +100,26 @@ jobs:
               new_block
           )
 
-          # Update sha256
-          new_block = re.sub(r'<sha256>[a-f0-9]+</sha256>', f'<sha256>{sha256}</sha256>', new_block)
+          # Update sha256 (also when the template's value is empty), or insert it
+          sha_element = f'<sha256>{sha256}</sha256>'
+          if re.search(r'<sha256>[a-f0-9]*</sha256>', new_block):
+              new_block = re.sub(r'<sha256>[a-f0-9]*</sha256>', lambda m: sha_element, new_block)
+          else:
+              new_block = re.sub(r'(\s*)(</tags>)', lambda m: m.group(0) + m.group(1) + sha_element, new_block, count=1)
+
+          # Set targetplatform explicitly instead of copying it from the template
+          platform_element = f'<targetplatform name="joomla" version="{platform}"/>'
+          if re.search(r'<targetplatform\b[^>]*/>', new_block):
+              new_block = re.sub(r'<targetplatform\b[^>]*/>', lambda m: platform_element, new_block)
+          else:
+              new_block = re.sub(r'(\s*)(<client>)', lambda m: m.group(1) + platform_element + m.group(0), new_block, count=1)
+
+          # Guard: the new entry must carry exactly one valid hash and the configured platform
+          hashes = re.findall(r'<sha256>([^<]*)</sha256>', new_block)
+          if hashes != [sha256]:
+              raise SystemExit(f"New update block has invalid <sha256> element(s): {hashes!r}")
+          if platform_element not in new_block:
+              raise SystemExit("New update block has no <targetplatform> element.")
 
           # Detect indentation of the last block and match it
           indent = re.match(r'(\s*)', last).group(1)
