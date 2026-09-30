@@ -15,6 +15,7 @@ use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Router\Route;
 use Joomla\CMS\Uri\Uri;
 use Joomla\CMS\HTML\Helpers\StringHelper;
+use TlwebNamespace\Module\Prettymasthead\Site\Rule\ButtonurlRule;
 
 \defined('_JEXEC') or die;
 
@@ -171,8 +172,8 @@ class PrettymastheadHelper
     }
 
     /**
-     * Makes the button URL safe for use in an href: only http(s) and site-relative URLs are kept,
-     * and internal non-SEF links are routed.
+     * Makes the button URL safe for use in an href: URLs with a scheme that can run script are dropped
+     * (see ButtonurlRule), and internal non-SEF links are routed.
      *
      * @param   string  $url  The button URL as stored in the module params.
      *
@@ -189,11 +190,8 @@ class PrettymastheadHelper
             return '';
         }
 
-        // Browsers ignore whitespace and control characters inside a scheme ("java\tscript:"), so ignore them here too.
-        // A scheme is whatever comes before a ":" that appears before any "/", "?" or "#".
-        $compact = preg_replace('/[\x00-\x20]+/', '', $url);
-
-        if (preg_match('~^([^/?#]*?):~', $compact, $matches) && !\in_array(strtolower($matches[1]), ['http', 'https'], true)) {
+        // Also checked here for values saved before the form rule existed
+        if (!ButtonurlRule::isAllowed($url)) {
             return '';
         }
 

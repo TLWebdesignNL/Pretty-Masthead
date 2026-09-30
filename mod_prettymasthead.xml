@@ -22,7 +22,7 @@
         <filename>logo.svg</filename>
     </media>
     <config>
-        <fields name="params">
+        <fields name="params" addruleprefix="TlwebNamespace\Module\Prettymasthead\Site\Rule">
             <fieldset name="basic">
                 <field
                         name="logo"
@@ -212,8 +212,8 @@
                             name="defaultbuttonurl"
                             type="url"
                             filter="url"
-                            validate="url"
-                            schemes="http,https"
+                            validate="buttonurl"
+                            message="MOD_PRETTYMASTHEAD_FIELD_BUTTONURL_INVALID"
                             relative="true"
                             label="MOD_PRETTYMASTHEAD_FIELD_DEFAULTBUTTONURL_LABEL"
                             description="MOD_PRETTYMASTHEAD_FIELD_DEFAULTBUTTONURL_DESC"
@@ -352,8 +352,8 @@
                                     name="mastheadbuttonurl"
                                     type="url"
                                     filter="url"
-                                    validate="url"
-                                    schemes="http,https"
+                                    validate="buttonurl"
+                                    message="MOD_PRETTYMASTHEAD_FIELD_BUTTONURL_INVALID"
                                     relative="true"
                                     label="MOD_PRETTYMASTHEAD_FIELD_MASTHEADBUTTONURL_LABEL"
                                     description="MOD_PRETTYMASTHEAD_FIELD_MASTHEADBUTTONURL_DESC"
