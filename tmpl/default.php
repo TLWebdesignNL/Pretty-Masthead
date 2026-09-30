@@ -15,8 +15,8 @@ use Joomla\CMS\HTML\HTMLHelper;
 // Escape a value for HTML text and attribute context
 $e = static fn ($v): string => htmlspecialchars((string) $v, ENT_QUOTES, 'UTF-8');
 
-// Only real heading elements may be used as the title tag
-$titleTag = \in_array($masthead['titletag'], ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'], true) ? $masthead['titletag'] : 'h2';
+// The helper only returns h1-h6 here
+$titleTag = $masthead['titletag'];
 
 $minHeight = (int) $minHeight;
 $maxHeight = (int) $maxHeight;
@@ -55,7 +55,7 @@ $maxHeight = (int) $maxHeight;
             <<?php echo $titleTag; ?> class="title">
             <span
                     class="<?php echo $e($masthead['titleclass']); ?>
-                                   <?php echo ($masthead['titlevisibility'] != "") ? "d-none d-" . $e($masthead['titlevisibility']) . "-block" : ""; ?>
+                                   <?php echo $e($masthead['titlevisibilityclass']); ?>
                             "
                     style="-webkit-box-decoration-break:clone;box-decoration-break:clone;"
             >
@@ -64,7 +64,7 @@ $maxHeight = (int) $maxHeight;
         </<?php echo $titleTag; ?>>
         <?php if (!empty($masthead['description'])) : ?>
             <div class="description mt-sm-2
-                                <?php echo ($masthead['descriptionvisibility'] != "") ? "d-none d-" . $e($masthead['descriptionvisibility']) . "-block" : ""; ?>
+                                <?php echo $e($masthead['descriptionvisibilityclass']); ?>
                     ">
                         <span
                                 class="<?php echo $e($masthead['descriptionclass']); ?>"

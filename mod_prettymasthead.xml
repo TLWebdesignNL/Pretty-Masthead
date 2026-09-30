@@ -125,6 +125,7 @@
                     <field
                             name="defaultmastheadtitletag"
                             type="list"
+                            validate="options"
                             label="MOD_PRETTYMASTHEAD_FIELD_DEFAULTMASTHEADTITLETAG_LABEL"
                             description="MOD_PRETTYMASTHEAD_FIELD_DEFAULTMASTHEADTITLETAG_DESC"
                             required="true"
@@ -159,6 +160,7 @@
                     <field
                             name="defaultmastheadposition"
                             type="radio"
+                            validate="options"
                             default="center"
                             label="MOD_PRETTYMASTHEAD_FIELD_DEFAULTMASTHEADPOSITION_LABEL"
                             description="MOD_PRETTYMASTHEAD_FIELD_DEFAULTMASTHEADPOSITION_DESC"
@@ -172,6 +174,7 @@
                     <field
                             name="defaulttitlevisibility"
                             type="radio"
+                            validate="options"
                             default=""
                             label="MOD_PRETTYMASTHEAD_FIELD_DEFAULTTITLEVISBILITY_LABEL"
                             description="MOD_PRETTYMASTHEAD_FIELD_DEFAULTTITLEVISBILITY_DESC"
@@ -186,6 +189,7 @@
                     <field
                             name="defaultdescriptionvisibility"
                             type="radio"
+                            validate="options"
                             default=""
                             label="MOD_PRETTYMASTHEAD_FIELD_DEFAULTDESCRIPTIONVISBILITY_LABEL"
                             description="MOD_PRETTYMASTHEAD_FIELD_DEFAULTDESCRIPTIONVISBILITY_DESC"
@@ -261,6 +265,7 @@
                             <field
                                     name="mastheadtitletag"
                                     type="list"
+                                    validate="options"
                                     label="MOD_PRETTYMASTHEAD_FIELD_MASTHEADTITLETAG_LABEL"
                                     description="MOD_PRETTYMASTHEAD_FIELD_MASTHEADTITLETAG_DESC"
                                     required="true"
@@ -295,6 +300,7 @@
                             <field
                                     name="mastheadposition"
                                     type="radio"
+                                    validate="options"
                                     default="center"
                                     label="MOD_PRETTYMASTHEAD_FIELD_MASTHEADPOSITION_LABEL"
                                     description="MOD_PRETTYMASTHEAD_FIELD_MASTHEADPOSITION_DESC"
@@ -308,6 +314,7 @@
                             <field
                                     name="mastheadtitlevisibility"
                                     type="radio"
+                                    validate="options"
                                     default=""
                                     label="MOD_PRETTYMASTHEAD_FIELD_TITLEVISBILITY_LABEL"
                                     description="MOD_PRETTYMASTHEAD_FIELD_TITLEVISBILITY_DESC"
@@ -322,6 +329,7 @@
                             <field
                                     name="mastheaddescriptionvisibility"
                                     type="radio"
+                                    validate="options"
                                     default=""
                                     label="MOD_PRETTYMASTHEAD_FIELD_DESCRIPTIONVISBILITY_LABEL"
                                     description="MOD_PRETTYMASTHEAD_FIELD_DESCRIPTIONVISBILITY_DESC"

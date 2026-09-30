@@ -26,6 +26,15 @@ use Joomla\CMS\HTML\Helpers\StringHelper;
 class PrettymastheadHelper
 {
     /**
+     * Allowed values for the title tag, content position and title/description visibility.
+     *
+     * @since  1.1.0
+     */
+    private const TITLE_TAGS   = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'];
+    private const POSITIONS    = ['start', 'center', 'end'];
+    private const VISIBILITIES = ['', 'sm', 'md', 'lg', 'none'];
+
+    /**
      * Retrieves masthead data based on menu item specific configurations, default settings,
      * and potentially the current article if within a category view.
      *
@@ -110,7 +119,55 @@ class PrettymastheadHelper
 
         $mastheadArray['buttonurl'] = self::getButtonUrl((string) $mastheadArray['buttonurl']);
 
+        // Only allow known values, as these end up in element names and class names
+        $mastheadArray['titletag']              = self::allowedValue($mastheadArray['titletag'], self::TITLE_TAGS, 'h2');
+        $mastheadArray['position']              = self::allowedValue($mastheadArray['position'], self::POSITIONS, 'center');
+        $mastheadArray['titlevisibility']       = self::allowedValue($mastheadArray['titlevisibility'], self::VISIBILITIES, '');
+        $mastheadArray['descriptionvisibility'] = self::allowedValue($mastheadArray['descriptionvisibility'], self::VISIBILITIES, '');
+        $mastheadArray['titlevisibilityclass']       = self::getVisibilityClass($mastheadArray['titlevisibility']);
+        $mastheadArray['descriptionvisibilityclass'] = self::getVisibilityClass($mastheadArray['descriptionvisibility']);
+
         return $mastheadArray;
+    }
+
+    /**
+     * Returns the value if it is one of the allowed values, otherwise the fallback.
+     *
+     * @param   mixed     $value     The value to check.
+     * @param   string[]  $allowed   The allowed values.
+     * @param   string    $fallback  The value to use when $value is not allowed.
+     *
+     * @return  string
+     *
+     * @since   1.1.0
+     */
+
+    private static function allowedValue($value, array $allowed, string $fallback): string
+    {
+        return \in_array($value, $allowed, true) ? $value : $fallback;
+    }
+
+    /**
+     * Builds the Bootstrap display classes for a visibility setting.
+     *
+     * @param   string  $visibility  '' (always show), 'sm', 'md', 'lg' (show from that breakpoint up) or 'none' (always hide).
+     *
+     * @return  string
+     *
+     * @since   1.1.0
+     */
+
+    private static function getVisibilityClass(string $visibility): string
+    {
+        if ($visibility === '') {
+            return '';
+        }
+
+        if ($visibility === 'none') {
+            return 'd-none';
+        }
+
+        return 'd-none d-' . $visibility . '-block';
     }
 
     /**
