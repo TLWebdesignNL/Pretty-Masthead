@@ -86,49 +86,38 @@ class PrettymastheadHelper
         $mastheadArray['buttonurl']             = (isset($defaultmasthead['buttonurl'])) ? $defaultmasthead['buttonurl'] : '';
         $mastheadArray['buttonclass']           = (isset($defaultmasthead['buttonclass'])) ? $defaultmasthead['buttonclass'] : '';
 
-        // LOOP THROUGH MENU ITEM SPECIFIC MASTHEADS
-        if (isset($mastheads) && is_object($mastheads)) {
-            $mastheadFound = false;
+        // Find the masthead configured for the current menu item
+        $menuMasthead = null;
+
+        if (!empty($itemId) && (\is_object($mastheads) || \is_array($mastheads))) {
             foreach ($mastheads as $m) {
-                if (!empty($itemId) && $itemId == $m->mastheadmenuitem) {
-                    $mastheadFound = true;
-                    $this->updateMastheadArray($m,$mastheadArray);
-
-                    // GET ACTIVE MENU TO CHECK IF WE HAVE CATEGORY VIEW AND ONLY THEN TRY TO GET ARTICLE
-                    $activeMenuQuery = $app->getMenu()->getActive()->query;
-                    if ($activeMenuQuery['view'] == "category") {
-                        // TRY TO GRAB ARTICLE
-                        $article = $this->getArticle($app, $input, $descSource, $imagePriority);
-                        $this->updateMastheadArray($article, $mastheadArray);
-                    }
-                } elseif (!$mastheadFound) {
-                    // IF ITEM ID DOES NOT MATCH MASTHEADMENUITEM THEN TRY TO USE ARTICLE ITEM CONTENT
-                    // THIS IS MAINLY USED WHEN YOU HAVE MENU ITEMS SET FOR CATEGORY ARTICLES.
-                    $article = $this->getArticle($app, $input, $descSource, $imagePriority);
-                    $this->updateMastheadArray($article, $mastheadArray);
+                if (\is_object($m) && (int) ($m->mastheadmenuitem ?? 0) === (int) $itemId) {
+                    $menuMasthead = $m;
+                    break;
                 }
             }
         }
 
-        // FORMAT MASTHEAD IMAGE
-        if ($mastheadArray['image'] != "") {
-            $mastheadArray['image'] = HTMLHelper::_('cleanImageURL', $mastheadArray['image']);
+        // Without a menu masthead, an article being viewed overrides the default masthead.
+        // With one, only when the menu item is a category (the article was opened from that category).
+        $useArticle = true;
 
-            if ($mastheadArray['image']->url != "") {
-                if ($mastheadArray['image']->attributes['width'] == 0 || $mastheadArray['image']->attributes['height'] == 0) {
-                    list($width, $height) = getimagesize($mastheadArray['image']->url);
-                    $mastheadArray['image']->attributes['width']  = $width;
-                    $mastheadArray['image']->attributes['height'] = $height;
-                }
+        if ($menuMasthead !== null) {
+            $this->updateMastheadArray($menuMasthead, $mastheadArray);
 
-                $mastheadArray['image']->url = Uri::root() . $mastheadArray['image']->url;
-            }
+            $useArticle = ($app->getMenu()->getActive()?->query['view'] ?? '') === 'category';
         }
+
+        if ($useArticle) {
+            $this->updateMastheadArray($this->getArticle($app, $input, $descSource, $imagePriority), $mastheadArray);
+        }
+
+        $mastheadArray['image'] = $this->getImage((string) $mastheadArray['image']);
 
         // Truncate description if descLength is set
         if (isset($descLength) && !empty($descLength)) {
             $mastheadArray['description'] = StringHelper::truncate(
-                $mastheadArray['description'],
+                (string) $mastheadArray['description'],
                 (int) $descLength,
                 true,
                 false
@@ -275,63 +264,141 @@ class PrettymastheadHelper
 
     private function getArticle(SiteApplication $app, $input, $descSource, $imagePriority)
     {
-        if ($input->get('option') === 'com_content' && $input->get('view') === 'article') {
-            // Save all the data you need to return
-            $items = new \stdClass();
-
-            // Get the article ID
-            $articleId = $input->getInt('id');
-
-            // Set application parameters in model
-            $appParams = $app->getParams();
-
-            // The article model
-            $model = $app->bootComponent('com_content')
-                ->getMVCFactory()->createModel('Article', 'Site', ['ignore_request' => true]);
-
-            // Please, use any other filter as you need
-            $model->setState('params', $appParams);
-            $model->setState('filter.published', 1);
-            $model->setState('article.id', (int)$articleId);
-
-            $article = $model->getItem();
-
-            $images       = json_decode($article->images);
-            $items->title = $article->title;
-            $items->image = ($images->image_intro) ?: $images->image_fulltext;
-            $imagealt = ($images->image_intro_alt) ?: $images->image_fulltext_alt;
-            $imagecaption = ($images->image_intro_caption) ?: $images->image_fulltext_caption;
-            if ($imagePriority && $imagePriority == "full") {
-                $items->image = ($images->image_fulltext) ?: $images->image_intro;
-                $imagealt = ($images->image_fulltext_alt) ?: $images->image_intro_alt;
-                $imagecaption = ($images->image_fulltext_caption) ?: $images->image_intro_caption;
-            }
-
-            switch ($descSource) {
-                case "article":
-                    // Plain text only: the layout escapes it, so decode entities and drop plugin tags like {loadmodule ...}
-                    $description        = strip_tags(str_replace('</p>', ' ', $article->introtext));
-                    $description        = html_entity_decode($description, ENT_QUOTES, 'UTF-8');
-                    $description        = preg_replace('/\{\/?[a-z][^{}]*\}/i', '', $description);
-                    $items->description = trim(preg_replace('/\s+/u', ' ', $description));
-                    break;
-                case "imagealt":
-                    $items->description = $imagealt;
-                    break;
-                case "imagecaption":
-                    $items->description = $imagecaption;
-                    break;
-                case "pagetitle":
-                    $items->description = $article->pagetitle;
-                    break;
-                case "metadesc":
-                    $items->description = $article->metadesc;
-                    break;
-            }
-
-            return $items;
+        if ($input->getCmd('option') !== 'com_content' || $input->getCmd('view') !== 'article') {
+            return false;
         }
 
-        return false;
+        // The article model
+        $model = $app->bootComponent('com_content')
+            ->getMVCFactory()->createModel('Article', 'Site', ['ignore_request' => true]);
+
+        $model->setState('params', $app->getParams());
+        $model->setState('filter.published', 1);
+        $model->setState('article.id', $input->getInt('id'));
+
+        try {
+            $article = $model->getItem();
+        } catch (\Throwable $e) {
+            // Article not found or not published: keep the menu or default masthead
+            return false;
+        }
+
+        // Do not show the title and image of an article the visitor may not view
+        if (!\is_object($article) || !$article->params instanceof Registry || !$article->params->get('access-view')) {
+            return false;
+        }
+
+        $images = json_decode((string) ($article->images ?? ''));
+
+        if (!\is_object($images)) {
+            $images = new \stdClass();
+        }
+
+        $intro = [
+            'image'   => (string) ($images->image_intro ?? ''),
+            'alt'     => (string) ($images->image_intro_alt ?? ''),
+            'caption' => (string) ($images->image_intro_caption ?? ''),
+        ];
+        $full = [
+            'image'   => (string) ($images->image_fulltext ?? ''),
+            'alt'     => (string) ($images->image_fulltext_alt ?? ''),
+            'caption' => (string) ($images->image_fulltext_caption ?? ''),
+        ];
+
+        [$first, $second] = $imagePriority === 'full' ? [$full, $intro] : [$intro, $full];
+
+        $items        = new \stdClass();
+        $items->title = (string) $article->title;
+        $items->image = $first['image'] ?: $second['image'];
+
+        switch ($descSource) {
+            case "article":
+                // Plain text only: the layout escapes it, so decode entities and drop plugin tags like {loadmodule ...}
+                $description        = strip_tags(str_replace('</p>', ' ', (string) $article->introtext));
+                $description        = html_entity_decode($description, ENT_QUOTES, 'UTF-8');
+                $description        = preg_replace('/\{\/?[a-z][^{}]*\}/i', '', $description);
+                $items->description = trim(preg_replace('/\s+/u', ' ', $description));
+                break;
+            case "imagealt":
+                $items->description = $first['alt'] ?: $second['alt'];
+                break;
+            case "imagecaption":
+                $items->description = $first['caption'] ?: $second['caption'];
+                break;
+            case "pagetitle":
+                // The browser page title is an article option, merged into the params by the site model
+                $items->description = (string) $article->params->get('article_page_title', '');
+                break;
+            case "metadesc":
+                $items->description = (string) ($article->metadesc ?? '');
+                break;
+        }
+
+        return $items;
+    }
+
+    /**
+     * Builds the image object for the layout from a media field value.
+     *
+     * Only local images are measured, and only when the media value has no size;
+     * remote images are never fetched, the layout then falls back to its default ratio.
+     *
+     * @param   string  $image  The media field value, e.g. "images/a.jpg#joomlaImage://local-images/a.jpg?width=800&height=600".
+     *
+     * @return  \stdClass|string  Object with url and attributes (width, height), or an empty string when there is no image.
+     *
+     * @since   1.2.0
+     */
+
+    private function getImage(string $image)
+    {
+        if ($image === '') {
+            return '';
+        }
+
+        $image = HTMLHelper::_('cleanImageURL', $image);
+
+        // Drop any media fragment (#joomlaImage://...) that cleanImageURL leaves on values without a size
+        $image->url = explode('#', (string) $image->url, 2)[0];
+
+        if ($image->url === '') {
+            return '';
+        }
+
+        $isRemote = (bool) preg_match('~^([a-z][a-z0-9+.-]*:)?//~i', $image->url);
+
+        if (!$isRemote && (empty($image->attributes['width']) || empty($image->attributes['height']))) {
+            [$image->attributes['width'], $image->attributes['height']] = $this->getLocalImageSize($image->url);
+        }
+
+        if (!$isRemote && !str_starts_with($image->url, '/')) {
+            $image->url = Uri::root() . $image->url;
+        }
+
+        return $image;
+    }
+
+    /**
+     * Reads the size of an image file inside the site root.
+     *
+     * @param   string  $url  The relative image URL.
+     *
+     * @return  int[]  Width and height, or [0, 0] when the file cannot be read.
+     *
+     * @since   1.2.0
+     */
+
+    private function getLocalImageSize(string $url): array
+    {
+        $root = realpath(JPATH_ROOT);
+        $path = realpath(JPATH_ROOT . '/' . ltrim(rawurldecode((string) parse_url($url, PHP_URL_PATH)), '/'));
+
+        if ($root === false || $path === false || !str_starts_with($path, $root . DIRECTORY_SEPARATOR) || !is_file($path)) {
+            return [0, 0];
+        }
+
+        $size = getimagesize($path);
+
+        return $size ? [(int) $size[0], (int) $size[1]] : [0, 0];
     }
 }

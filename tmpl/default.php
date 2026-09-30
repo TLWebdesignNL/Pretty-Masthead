@@ -23,7 +23,7 @@ $maxHeight = (int) $maxHeight;
 ?>
 <div class="pretty-masthead">
     <?php
-    if ($masthead['image']->url != "") :
+    if (\is_object($masthead['image']) && $masthead['image']->url !== '') :
     $width = (int) $masthead['image']->attributes['width'];
     $height = (int) $masthead['image']->attributes['height'];
     $aspectRatio = 0.25;
@@ -32,15 +32,16 @@ $maxHeight = (int) $maxHeight;
         $aspectRatio = $height / $width;
     }
 
-    // Percent-encode characters that could end the quoted CSS url() string
+    // Percent-encode the characters an unquoted CSS url() may not contain, and drop control characters.
+    // Unquoted, because the SEF plugin does not recognise &quot; and would prefix the URL with the base path.
     $imageUrl = str_replace(
-        ['"', "'", '\\', '(', ')', ' ', "\n", "\r", "\t"],
-        ['%22', '%27', '%5C', '%28', '%29', '%20', '', '', ''],
-        (string) $masthead['image']->url
+        ['"', "'", '\\', '(', ')', ' '],
+        ['%22', '%27', '%5C', '%28', '%29', '%20'],
+        preg_replace('/[\x00-\x1F\x7F]/', '', (string) $masthead['image']->url)
     );
 
     $style = '--aspect-ratio: ' . round($aspectRatio * 100) . '%;'
-        . ' --pm-image: url("' . $imageUrl . '");'
+        . ' --pm-image: url(' . $imageUrl . ');'
         . ' background: var(--pm-image) center center / cover no-repeat;'
         . ($minHeight > 0 ? ' min-height: ' . $minHeight . 'px;' : '')
         . ($maxHeight > 0 ? ' max-height: ' . $maxHeight . 'px;' : '');
