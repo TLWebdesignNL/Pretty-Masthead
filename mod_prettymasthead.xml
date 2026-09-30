@@ -44,6 +44,8 @@
                 <field
                         name="desclength"
                         type="number"
+                        filter="integer"
+                        validate="number"
                         label="MOD_PRETTYMASTHEAD_FIELD_DESCLENGTH_LABEL"
                         description="MOD_PRETTYMASTHEAD_FIELD_DESCLENGTH_DESC"
                         default="40"
@@ -61,22 +63,26 @@
                 <field
                         name="minheight"
                         type="number"
+                        filter="integer"
+                        validate="number"
                         label="MOD_PRETTYMASTHEAD_FIELD_MINHEIGHT_LABEL"
                         description="MOD_PRETTYMASTHEAD_FIELD_MINHEIGHT_DESC"
                         default="0"
                         min="0"
-                        max="255"
+                        max="2000"
                         step="1"
                         required="false"
                 />
                 <field
                         name="maxheight"
                         type="number"
+                        filter="integer"
+                        validate="number"
                         label="MOD_PRETTYMASTHEAD_FIELD_MAXHEIGHT_LABEL"
                         description="MOD_PRETTYMASTHEAD_FIELD_MAXHEIGHT_DESC"
                         default="0"
                         min="0"
-                        max="255"
+                        max="2000"
                         step="1"
                         required="false"
                 />

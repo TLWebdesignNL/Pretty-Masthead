@@ -112,7 +112,7 @@ class PrettymastheadHelper
         if (isset($descLength) && !empty($descLength)) {
             $mastheadArray['description'] = StringHelper::truncate(
                 $mastheadArray['description'],
-                $descLength,
+                (int) $descLength,
                 true,
                 false
             );
