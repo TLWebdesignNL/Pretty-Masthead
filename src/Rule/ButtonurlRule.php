@@ -20,14 +20,14 @@ use Joomla\Registry\Registry;
  * Form rule for the button URL: web, site-relative, mailto:, tel: and app links are allowed,
  * schemes that can run script are not.
  *
- * @since  1.1.0
+ * @since  1.2.0
  */
 class ButtonurlRule extends FormRule
 {
     /**
      * Schemes that can execute script when used in an href.
      *
-     * @since  1.1.0
+     * @since  1.2.0
      */
     public const BLOCKED_SCHEMES = ['javascript', 'vbscript', 'data'];
 
@@ -42,7 +42,7 @@ class ButtonurlRule extends FormRule
      *
      * @return  boolean  True if the value is valid, false otherwise.
      *
-     * @since   1.1.0
+     * @since   1.2.0
      */
     public function test(\SimpleXMLElement $element, $value, $group = null, ?Registry $input = null, ?Form $form = null)
     {
@@ -62,7 +62,7 @@ class ButtonurlRule extends FormRule
      *
      * @return  boolean
      *
-     * @since   1.1.0
+     * @since   1.2.0
      */
     public static function isAllowed(string $url): bool
     {

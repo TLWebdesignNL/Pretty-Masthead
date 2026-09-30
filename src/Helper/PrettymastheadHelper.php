@@ -30,7 +30,7 @@ class PrettymastheadHelper
     /**
      * Allowed values for the title tag, content position and title/description visibility.
      *
-     * @since  1.1.0
+     * @since  1.2.0
      */
     private const TITLE_TAGS   = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'];
     private const POSITIONS    = ['start', 'center', 'end'];
@@ -146,7 +146,7 @@ class PrettymastheadHelper
      *
      * @return  string
      *
-     * @since   1.1.0
+     * @since   1.2.0
      */
 
     private function allowedValue($value, array $allowed, string $fallback): string
@@ -161,7 +161,7 @@ class PrettymastheadHelper
      *
      * @return  string
      *
-     * @since   1.1.0
+     * @since   1.2.0
      */
 
     private function getVisibilityClass(string $visibility): string
@@ -185,7 +185,7 @@ class PrettymastheadHelper
      *
      * @return  string  The URL to link to (not HTML-escaped), or an empty string if it is not allowed.
      *
-     * @since   1.1.0
+     * @since   1.2.0
      */
 
     private function getButtonUrl(string $url): string

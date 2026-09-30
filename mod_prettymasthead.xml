@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <extension type="module" client="site" method="upgrade">
     <name>MOD_PRETTYMASTHEAD</name>
-    <creationDate>10-28-2023</creationDate>
+    <creationDate>2023-10-28</creationDate>
     <author>Tom van der Laan</author>
     <authorEmail>info@tlwebdesign.nl</authorEmail>
     <authorUrl>https://tlwebdesign.nl</authorUrl>
     <copyright>TLWebdesign</copyright>
-    <license>GNU General Public License version 2 or later; see LICENSE.txt</license>
-    <version>1.0.4</version>
+    <license>GNU General Public License version 2 or later; see LICENSE</license>
+    <version>1.2.0</version>
     <description>MOD_PRETTYMASTHEAD_XML_DESCRIPTION</description>
     <scriptfile>script.php</scriptfile>
     <namespace path="src">TlwebNamespace\Module\Prettymasthead</namespace>
@@ -92,10 +92,11 @@
                 <field
                         name="descsource"
                         type="list"
+                        default="article"
                         label="MOD_PRETTYMASTHEAD_FIELD_DESCSOURCE_LABEL"
                         description="MOD_PRETTYMASTHEAD_FIELD_DESCSOURCE_DESC"
                 >
-                    <option value="article" checked="true">MOD_PRETTYMASTHEAD_FIELD_DESCSOURCE_ARTICLE</option>
+                    <option value="article">MOD_PRETTYMASTHEAD_FIELD_DESCSOURCE_ARTICLE</option>
                     <option value="imagealt">MOD_PRETTYMASTHEAD_FIELD_DESCSOURCE_IMAGEALT</option>
                     <option value="imagecaption">MOD_PRETTYMASTHEAD_FIELD_DESCSOURCE_IMAGECAPTION</option>
                     <option value="pagetitle">MOD_PRETTYMASTHEAD_FIELD_DESCSOURCE_PAGETITLE</option>
@@ -133,12 +134,13 @@
                     <field
                             name="defaultmastheadtitletag"
                             type="list"
+                            default="h1"
                             validate="options"
                             label="MOD_PRETTYMASTHEAD_FIELD_DEFAULTMASTHEADTITLETAG_LABEL"
                             description="MOD_PRETTYMASTHEAD_FIELD_DEFAULTMASTHEADTITLETAG_DESC"
                             required="true"
                     >
-                        <option value="h1" checked="true">MOD_PRETTYMASTHEAD_FIELD_MASTHEADTITLETAG_H1</option>
+                        <option value="h1">MOD_PRETTYMASTHEAD_FIELD_MASTHEADTITLETAG_H1</option>
                         <option value="h2">MOD_PRETTYMASTHEAD_FIELD_MASTHEADTITLETAG_H2</option>
                         <option value="h3">MOD_PRETTYMASTHEAD_FIELD_MASTHEADTITLETAG_H3</option>
                         <option value="h4">MOD_PRETTYMASTHEAD_FIELD_MASTHEADTITLETAG_H4</option>
@@ -273,12 +275,13 @@
                             <field
                                     name="mastheadtitletag"
                                     type="list"
+                                    default="h1"
                                     validate="options"
                                     label="MOD_PRETTYMASTHEAD_FIELD_MASTHEADTITLETAG_LABEL"
                                     description="MOD_PRETTYMASTHEAD_FIELD_MASTHEADTITLETAG_DESC"
                                     required="true"
                             >
-                                <option value="h1" checked="true">MOD_PRETTYMASTHEAD_FIELD_MASTHEADTITLETAG_H1</option>
+                                <option value="h1">MOD_PRETTYMASTHEAD_FIELD_MASTHEADTITLETAG_H1</option>
                                 <option value="h2">MOD_PRETTYMASTHEAD_FIELD_MASTHEADTITLETAG_H2</option>
                                 <option value="h3">MOD_PRETTYMASTHEAD_FIELD_MASTHEADTITLETAG_H3</option>
                                 <option value="h4">MOD_PRETTYMASTHEAD_FIELD_MASTHEADTITLETAG_H4</option>
@@ -428,8 +431,8 @@
     </config>
     <updateservers>
         <server type="extension" priority="2" name="Pretty Masthead Updates">
-            https://raw.githubusercontent.com/TLWebdesign/Pretty-Masthead/main/updates.xml
+            https://raw.githubusercontent.com/TLWebdesignNL/Pretty-Masthead/main/updates.xml
         </server>
     </updateservers>
-    <changelogurl>https://raw.githubusercontent.com/TLWebdesign/Pretty-Masthead/main/changelog.xml</changelogurl>
+    <changelogurl>https://raw.githubusercontent.com/TLWebdesignNL/Pretty-Masthead/main/changelog.xml</changelogurl>
 </extension>

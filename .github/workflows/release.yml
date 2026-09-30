@@ -72,34 +72,18 @@ jobs:
               raise SystemExit("No existing <update> block found to use as template.")
           last = blocks[-1]
 
-          # Get old tag from last block's download URL to swap it out
-          old_tag_match = re.search(r'archive/refs/tags/([^\s<"]+)', last)
-          if old_tag_match:
-              old_tag = old_tag_match.group(1).removesuffix('.zip')
-              new_block = last.replace(
-                  f"archive/refs/tags/{old_tag}",
-                  f"archive/refs/tags/{tag}"
-              )
-          else:
-              new_block = re.sub(
-                  r'(archive/refs/tags/)[^\s<"]+',
-                  rf'\g<1>{tag}.zip',
-                  last
-              )
+          # Set name, version, download URL and changelog URL explicitly, from this repository and tag
+          zip_url       = f"https://github.com/{repo}/archive/refs/tags/{tag}.zip"
+          changelog_url = f"https://raw.githubusercontent.com/{repo}/main/changelog.xml"
 
-          # Update <version> tag
-          old_version = re.search(r'<version>([^<]+)</version>', last).group(1).strip()
-          new_block = new_block.replace(
-              f'<version>{old_version}</version>',
-              f'<version>{version}</version>'
-          )
+          new_block = re.sub(r'<name>[^<]*</name>', lambda m: f'<name>Pretty Masthead {version}</name>', last, count=1)
+          new_block = re.sub(r'<version>[^<]*</version>', lambda m: f'<version>{version}</version>', new_block, count=1)
+          new_block = re.sub(r'(<downloadurl\b[^>]*>)\s*[^<]*?\s*(</downloadurl>)',
+                             lambda m: f'{m.group(1)}\n                {zip_url}\n            {m.group(2)}', new_block, count=1)
+          new_block = re.sub(r'<changelogurl>[^<]*</changelogurl>', lambda m: f'<changelogurl>{changelog_url}</changelogurl>', new_block, count=1)
 
-          # Update version in <name> if present
-          new_block = re.sub(
-              r'(<name>[^<]*?)' + re.escape(old_version) + r'([^<]*</name>)',
-              lambda m: m.group(0).replace(old_version, version, 1),
-              new_block
-          )
+          if zip_url not in new_block or f'<version>{version}</version>' not in new_block:
+              raise SystemExit("Could not set the download URL or version in the new update block.")
 
           # Update sha256 (also when the template's value is empty), or insert it
           sha_element = f'<sha256>{sha256}</sha256>'

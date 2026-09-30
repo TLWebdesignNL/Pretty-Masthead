@@ -1,6 +1,6 @@
 <updates>
     <update>
-        <name>Pretty Masthead0.1.0</name>
+        <name>Pretty Masthead 0.1.0</name>
         <description/>
         <element>mod_prettymasthead</element>
         <type>module</type>
@@ -273,7 +273,7 @@
         <client>site</client>
     </update>
     <update>
-        <name>Pretty Masthead</name>
+        <name>Pretty Masthead 1.0.0</name>
         <description/>
         <element>mod_prettymasthead</element>
         <type>module</type>
@@ -295,7 +295,7 @@
         <client>site</client>
     </update>
     <update>
-        <name>Pretty Masthead</name>
+        <name>Pretty Masthead 1.0.1</name>
         <description/>
         <element>mod_prettymasthead</element>
         <type>module</type>
@@ -317,7 +317,7 @@
         <client>site</client>
     </update>
     <update>
-        <name>Pretty Masthead</name>
+        <name>Pretty Masthead 1.0.2</name>
         <description/>
         <element>mod_prettymasthead</element>
         <type>module</type>
@@ -339,7 +339,7 @@
         <client>site</client>
     </update>
     <update>
-        <name>Pretty Masthead</name>
+        <name>Pretty Masthead 1.0.3</name>
         <description/>
         <element>mod_prettymasthead</element>
         <type>module</type>
@@ -361,7 +361,7 @@
         <client>site</client>
     </update>
     <update>
-        <name>Pretty Masthead</name>
+        <name>Pretty Masthead 1.0.4</name>
         <description/>
         <element>mod_prettymasthead</element>
         <type>module</type>
