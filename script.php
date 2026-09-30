@@ -11,6 +11,7 @@
 // No direct access to this file
 \defined('_JEXEC') or die;
 
+use Joomla\CMS\Cache\CacheControllerFactoryInterface;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Log\Log;
@@ -73,8 +74,34 @@ class mod_prettymastheadInstallerScript
         echo Text::_('MOD_PRETTYMASTHEAD_INSTALLERSCRIPT_UPDATE');
 
         $this->migrateCacheMode();
+        $this->cleanCache();
 
         return true;
+    }
+
+    /**
+     * Clear cached module output and the cached module list.
+     *
+     * The module list cache holds the module params, including the old cache mode,
+     * so without this the old mode and its cached output stay in use until they expire.
+     *
+     * @return  void
+     *
+     * @since   1.2.0
+     */
+    private function cleanCache(): void
+    {
+        $app = Factory::getApplication();
+
+        foreach (['com_modules', 'mod_prettymasthead'] as $group) {
+            try {
+                Factory::getContainer()->get(CacheControllerFactoryInterface::class)
+                    ->createCacheController('callback', ['defaultgroup' => $group, 'cachebase' => $app->get('cache_path', JPATH_CACHE)])
+                    ->clean();
+            } catch (\Throwable $e) {
+                Log::add(Text::sprintf('MOD_PRETTYMASTHEAD_INSTALLERSCRIPT_CACHEMODE_FAILED', $e->getMessage()), Log::WARNING, 'jerror');
+            }
+        }
     }
 
     /**

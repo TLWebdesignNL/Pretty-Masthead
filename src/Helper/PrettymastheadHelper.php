@@ -10,11 +10,12 @@
 
 namespace TlwebNamespace\Module\Prettymasthead\Site\Helper;
 
-use Joomla\CMS\Factory;
+use Joomla\CMS\Application\SiteApplication;
 use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\HTML\Helpers\StringHelper;
 use Joomla\CMS\Router\Route;
 use Joomla\CMS\Uri\Uri;
-use Joomla\CMS\HTML\Helpers\StringHelper;
+use Joomla\Registry\Registry;
 use TlwebNamespace\Module\Prettymasthead\Site\Rule\ButtonurlRule;
 
 \defined('_JEXEC') or die;
@@ -39,21 +40,37 @@ class PrettymastheadHelper
      * Retrieves masthead data based on menu item specific configurations, default settings,
      * and potentially the current article if within a category view.
      *
-     * @param   object  $mastheads        An object containing menu-item specific mastheads.
-     * @param   object  $defaultmasthead  An object containing default masthead settings.
-     * @param   int     $descLength       Maximum length of the description.
-     * @param   string  $descSource       Source of the description (article, note, imagealt, imagecaption, pagetitle, metadesc).
-     * @param   string  $imagePriority    Priority of image source (intro, full).
+     * @param   Registry         $params  The module parameters.
+     * @param   SiteApplication  $app     The application.
      *
      * @return  array    $mastheadArray     An associative array containing masthead data (title, image, description, etc.).
      *
      * @since   0.1.0
      */
 
-    public static function getMasthead($mastheads, $defaultmasthead, $descLength, $descSource, $imagePriority): array
+    public function getMasthead(Registry $params, SiteApplication $app): array
     {
-        $app   = Factory::getApplication();
-        $input = $app->input;
+        $input = $app->getInput();
+
+        $mastheads     = $params->get('mastheads');
+        $descLength    = $params->get('desclength');
+        $descSource    = $params->get('descsource');
+        $imagePriority = $params->get('imagepriority');
+
+        $defaultmasthead = [
+            'image'                 => $params->get('defaultmastheadimage'),
+            'title'                 => $params->get('defaultmastheadtitle'),
+            'description'           => $params->get('defaultmastheaddescription'),
+            'position'              => $params->get('defaultmastheadposition'),
+            'titletag'              => $params->get('defaultmastheadtitletag'),
+            'titleclass'            => $params->get('defaultmastheadtitleclass'),
+            'descriptionclass'      => $params->get('defaultmastheaddescriptionclass'),
+            'titlevisibility'       => $params->get('defaulttitlevisibility'),
+            'descriptionvisibility' => $params->get('defaultdescriptionvisibility'),
+            'buttontext'            => $params->get('defaultbuttontext'),
+            'buttonurl'             => $params->get('defaultbuttonurl'),
+            'buttonclass'           => $params->get('defaultbuttonclass'),
+        ];
 
         $itemId                                 = $input->get('Itemid', '', 'INT');
         $mastheadArray['image']                 = (isset($defaultmasthead['image'])) ? $defaultmasthead['image'] : '';
@@ -75,20 +92,20 @@ class PrettymastheadHelper
             foreach ($mastheads as $m) {
                 if (!empty($itemId) && $itemId == $m->mastheadmenuitem) {
                     $mastheadFound = true;
-                    self::updateMastheadArray($m,$mastheadArray);
+                    $this->updateMastheadArray($m,$mastheadArray);
 
                     // GET ACTIVE MENU TO CHECK IF WE HAVE CATEGORY VIEW AND ONLY THEN TRY TO GET ARTICLE
                     $activeMenuQuery = $app->getMenu()->getActive()->query;
                     if ($activeMenuQuery['view'] == "category") {
                         // TRY TO GRAB ARTICLE
-                        $article = self::getArticle($app, $input, $descSource, $imagePriority);
-                        self::updateMastheadArray($article, $mastheadArray);
+                        $article = $this->getArticle($app, $input, $descSource, $imagePriority);
+                        $this->updateMastheadArray($article, $mastheadArray);
                     }
                 } elseif (!$mastheadFound) {
                     // IF ITEM ID DOES NOT MATCH MASTHEADMENUITEM THEN TRY TO USE ARTICLE ITEM CONTENT
                     // THIS IS MAINLY USED WHEN YOU HAVE MENU ITEMS SET FOR CATEGORY ARTICLES.
-                    $article = self::getArticle($app, $input, $descSource, $imagePriority);
-                    self::updateMastheadArray($article, $mastheadArray);
+                    $article = $this->getArticle($app, $input, $descSource, $imagePriority);
+                    $this->updateMastheadArray($article, $mastheadArray);
                 }
             }
         }
@@ -118,15 +135,15 @@ class PrettymastheadHelper
             );
         }
 
-        $mastheadArray['buttonurl'] = self::getButtonUrl((string) $mastheadArray['buttonurl']);
+        $mastheadArray['buttonurl'] = $this->getButtonUrl((string) $mastheadArray['buttonurl']);
 
         // Only allow known values, as these end up in element names and class names
-        $mastheadArray['titletag']              = self::allowedValue($mastheadArray['titletag'], self::TITLE_TAGS, 'h2');
-        $mastheadArray['position']              = self::allowedValue($mastheadArray['position'], self::POSITIONS, 'center');
-        $mastheadArray['titlevisibility']       = self::allowedValue($mastheadArray['titlevisibility'], self::VISIBILITIES, '');
-        $mastheadArray['descriptionvisibility'] = self::allowedValue($mastheadArray['descriptionvisibility'], self::VISIBILITIES, '');
-        $mastheadArray['titlevisibilityclass']       = self::getVisibilityClass($mastheadArray['titlevisibility']);
-        $mastheadArray['descriptionvisibilityclass'] = self::getVisibilityClass($mastheadArray['descriptionvisibility']);
+        $mastheadArray['titletag']              = $this->allowedValue($mastheadArray['titletag'], self::TITLE_TAGS, 'h2');
+        $mastheadArray['position']              = $this->allowedValue($mastheadArray['position'], self::POSITIONS, 'center');
+        $mastheadArray['titlevisibility']       = $this->allowedValue($mastheadArray['titlevisibility'], self::VISIBILITIES, '');
+        $mastheadArray['descriptionvisibility'] = $this->allowedValue($mastheadArray['descriptionvisibility'], self::VISIBILITIES, '');
+        $mastheadArray['titlevisibilityclass']       = $this->getVisibilityClass($mastheadArray['titlevisibility']);
+        $mastheadArray['descriptionvisibilityclass'] = $this->getVisibilityClass($mastheadArray['descriptionvisibility']);
 
         return $mastheadArray;
     }
@@ -143,7 +160,7 @@ class PrettymastheadHelper
      * @since   1.1.0
      */
 
-    private static function allowedValue($value, array $allowed, string $fallback): string
+    private function allowedValue($value, array $allowed, string $fallback): string
     {
         return \in_array($value, $allowed, true) ? $value : $fallback;
     }
@@ -158,7 +175,7 @@ class PrettymastheadHelper
      * @since   1.1.0
      */
 
-    private static function getVisibilityClass(string $visibility): string
+    private function getVisibilityClass(string $visibility): string
     {
         if ($visibility === '') {
             return '';
@@ -182,7 +199,7 @@ class PrettymastheadHelper
      * @since   1.1.0
      */
 
-    private static function getButtonUrl(string $url): string
+    private function getButtonUrl(string $url): string
     {
         $url = trim($url);
 
@@ -221,7 +238,7 @@ class PrettymastheadHelper
      * @since   1.0.0
      */
 
-    private static function updateMastheadArray($updateData, array &$mastheadArray)
+    private function updateMastheadArray($updateData, array &$mastheadArray)
     {
         if (!$updateData) {
             return;
@@ -246,7 +263,7 @@ class PrettymastheadHelper
      * This method retrieves an article from Joomla's com_content component,
      * applying various filters based on the parameters provided.
      *
-     * @param   \Joomla\CMS\Application\CMSApplication  $app            The application object.
+     * @param   SiteApplication                         $app            The application object.
      * @param   \Joomla\Input\Input                     $input          The input object.
      * @param   string                                  $descSource     The source of the description field ('article', etc.).
      * @param   string                                  $imagePriority  The image priority ('full' or 'intro').
@@ -256,14 +273,14 @@ class PrettymastheadHelper
      * @since   V0.3.0
      */
 
-    public static function getArticle($app, $input, $descSource, $imagePriority)
+    private function getArticle(SiteApplication $app, $input, $descSource, $imagePriority)
     {
         if ($input->get('option') === 'com_content' && $input->get('view') === 'article') {
             // Save all the data you need to return
             $items = new \stdClass();
 
             // Get the article ID
-            $articleId = $app->input->getInt('id');
+            $articleId = $input->getInt('id');
 
             // Set application parameters in model
             $appParams = $app->getParams();

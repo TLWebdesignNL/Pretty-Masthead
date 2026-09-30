@@ -12,7 +12,7 @@
     <scriptfile>script.php</scriptfile>
     <namespace path="src">TlwebNamespace\Module\Prettymasthead</namespace>
     <files>
-        <filename module="mod_prettymasthead">mod_prettymasthead.php</filename>
+        <folder module="mod_prettymasthead">services</folder>
         <folder>tmpl</folder>
         <folder>src</folder>
         <folder>language</folder>
