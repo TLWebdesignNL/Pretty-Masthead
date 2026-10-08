@@ -21,9 +21,6 @@ $titleTag = $masthead['titletag'];
 // No heading at all when the title is always hidden or empty, so no empty heading ends up in the outline
 $showTitle = $masthead['titlevisibility'] !== 'none' && trim((string) $masthead['title']) !== '';
 
-// Bootstrap 5 variant classes like btn-primary only work together with the base btn class
-$buttonClasses = array_unique(array_merge(['btn'], preg_split('/\s+/', trim((string) $masthead['buttonclass']), -1, PREG_SPLIT_NO_EMPTY)));
-
 $minHeight = (int) $minHeight;
 $maxHeight = (int) $maxHeight;
 ?>
@@ -76,11 +73,17 @@ $maxHeight = (int) $maxHeight;
                         </span>
             </div>
         <?php endif; ?>
-        <?php if (!empty($masthead['buttontext'])) : ?>
-            <div class="button mt-sm-2">
-                <a class="<?php echo $e(implode(' ', $buttonClasses)); ?>" href="<?php echo $e($masthead['buttonurl']); ?>">
-                    <?php echo $e($masthead['buttontext']); ?>
-                </a>
+        <?php if (!empty($masthead['buttons'])) : ?>
+            <div class="button mt-sm-2 d-flex flex-wrap gap-2 justify-content-<?php echo $e($masthead['position']); ?>">
+                <?php foreach ($masthead['buttons'] as $button) : ?>
+                    <?php
+                    // Bootstrap 5 variant classes like btn-primary only work together with the base btn class
+                    $buttonClasses = array_unique(array_merge(['btn'], preg_split('/\s+/', $button['class'], -1, PREG_SPLIT_NO_EMPTY)));
+                    ?>
+                    <a class="<?php echo $e(implode(' ', $buttonClasses)); ?>" href="<?php echo $e($button['url']); ?>">
+                        <?php echo $e($button['text']); ?>
+                    </a>
+                <?php endforeach; ?>
             </div>
         <?php endif; ?>
     </div>

@@ -70,7 +70,7 @@ return new class () implements InstallerScriptInterface {
         echo Text::_('MOD_PRETTYMASTHEAD_INSTALLERSCRIPT_UPDATE');
 
         $this->removeLegacyEntryFile($adapter);
-        $this->migrateCacheMode();
+        $this->migrateParams();
         $this->cleanCache();
 
         return true;
@@ -194,16 +194,17 @@ return new class () implements InstallerScriptInterface {
     }
 
     /**
-     * Switch existing module instances to the page-aware "safeuri" cache mode.
+     * Bring the params of existing module instances up to date.
      *
-     * The hidden cachemode field posts its stored value back, so re-saving a module
-     * would keep the old "static" mode, which served one masthead on every page.
+     * - The cache mode becomes the page-aware "safeuri": the hidden cachemode field posts its stored value back,
+     *   so re-saving a module would keep the old "static" mode, which served one masthead on every page.
+     * - The single button of the default masthead and of each menu masthead becomes the first row of its buttons list.
      *
      * @return  void
      *
      * @since   1.2.0
      */
-    private function migrateCacheMode(): void
+    private function migrateParams(): void
     {
         try {
             $db     = Factory::getContainer()->get(DatabaseInterface::class);
@@ -220,13 +221,29 @@ return new class () implements InstallerScriptInterface {
             foreach ($rows as $row) {
                 $params = json_decode((string) $row->params);
 
-                if (!$params instanceof \stdClass || ($params->cachemode ?? '') === 'safeuri') {
+                if (!$params instanceof \stdClass) {
                     continue;
                 }
 
-                $params->cachemode = 'safeuri';
-                $json              = json_encode($params);
-                $id                = (int) $row->id;
+                $changed = $this->migrateButton($params, 'default');
+
+                foreach ((array) ($params->mastheads ?? []) as $masthead) {
+                    if ($masthead instanceof \stdClass && $this->migrateButton($masthead, 'masthead')) {
+                        $changed = true;
+                    }
+                }
+
+                if (($params->cachemode ?? '') !== 'safeuri') {
+                    $params->cachemode = 'safeuri';
+                    $changed           = true;
+                }
+
+                if (!$changed) {
+                    continue;
+                }
+
+                $json = json_encode($params);
+                $id   = (int) $row->id;
 
                 if ($json === false) {
                     continue;
@@ -242,8 +259,53 @@ return new class () implements InstallerScriptInterface {
                 $db->setQuery($update)->execute();
             }
         } catch (\Throwable $e) {
-            // Never block the update over this; affected modules keep the old cache mode until it is fixed by hand
+            // Never block the update over this; affected modules keep their old params until they are fixed by hand
             Log::add(Text::sprintf('MOD_PRETTYMASTHEAD_INSTALLERSCRIPT_CACHEMODE_FAILED', $e->getMessage()), Log::WARNING, 'jerror');
         }
+    }
+
+    /**
+     * Move a single button (<prefix>buttontext, <prefix>buttonurl, <prefix>buttonclass) into the <prefix>buttons list.
+     *
+     * @param   \stdClass  $holder  The module params, or one menu masthead row.
+     * @param   string     $prefix  "default" or "masthead".
+     *
+     * @return  boolean  True when $holder was changed.
+     *
+     * @since   1.2.0
+     */
+    private function migrateButton(\stdClass $holder, string $prefix): bool
+    {
+        $list    = $prefix . 'buttons';
+        $changed = false;
+        $button  = [];
+
+        foreach (['buttontext', 'buttonurl', 'buttonclass'] as $key) {
+            if (property_exists($holder, $prefix . $key)) {
+                $button[$key] = (string) $holder->{$prefix . $key};
+                $changed      = true;
+
+                unset($holder->{$prefix . $key});
+            }
+        }
+
+        $existing = $holder->{$list} ?? null;
+        $hasList  = (\is_object($existing) || \is_array($existing)) && (array) $existing !== [];
+
+        // A button without text was never shown
+        if (trim($button['buttontext'] ?? '') === '' || $hasList) {
+            return $changed;
+        }
+
+        // Subform rows are stored as <field name><index>
+        $holder->{$list} = (object) [
+            $list . '0' => (object) [
+                'buttontext'  => $button['buttontext'],
+                'buttonurl'   => $button['buttonurl'] ?? '',
+                'buttonclass' => $button['buttonclass'] ?? 'btn-primary',
+            ],
+        ];
+
+        return true;
     }
 };

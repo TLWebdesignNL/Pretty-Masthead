@@ -12,10 +12,10 @@ namespace TlwebNamespace\Module\Prettymasthead\Site\Helper;
 
 use Joomla\CMS\Application\SiteApplication;
 use Joomla\CMS\HTML\HTMLHelper;
-use Joomla\CMS\HTML\Helpers\StringHelper;
 use Joomla\CMS\Router\Route;
 use Joomla\CMS\Uri\Uri;
 use Joomla\Registry\Registry;
+use Joomla\String\StringHelper;
 use TlwebNamespace\Module\Prettymasthead\Site\Rule\ButtonurlRule;
 
 \defined('_JEXEC') or die;
@@ -67,10 +67,14 @@ class PrettymastheadHelper
             'descriptionclass'      => $params->get('defaultmastheaddescriptionclass'),
             'titlevisibility'       => $params->get('defaulttitlevisibility'),
             'descriptionvisibility' => $params->get('defaultdescriptionvisibility'),
-            'buttontext'            => $params->get('defaultbuttontext'),
-            'buttonurl'             => $params->get('defaultbuttonurl'),
-            'buttonclass'           => $params->get('defaultbuttonclass'),
         ];
+
+        $buttons = $this->getButtons(
+            $params->get('defaultbuttons'),
+            $params->get('defaultbuttontext'),
+            $params->get('defaultbuttonurl'),
+            $params->get('defaultbuttonclass')
+        );
 
         $itemId                                 = $input->get('Itemid', '', 'INT');
         $mastheadArray['image']                 = (isset($defaultmasthead['image'])) ? $defaultmasthead['image'] : '';
@@ -82,9 +86,6 @@ class PrettymastheadHelper
         $mastheadArray['descriptionclass']      = (isset($defaultmasthead['descriptionclass'])) ? $defaultmasthead['descriptionclass'] : '';
         $mastheadArray['titlevisibility']       = (isset($defaultmasthead['titlevisibility'])) ? $defaultmasthead['titlevisibility'] : '';
         $mastheadArray['descriptionvisibility'] = (isset($defaultmasthead['descriptionvisibility'])) ? $defaultmasthead['descriptionvisibility'] : '';
-        $mastheadArray['buttontext']            = (isset($defaultmasthead['buttontext'])) ? $defaultmasthead['buttontext'] : '';
-        $mastheadArray['buttonurl']             = (isset($defaultmasthead['buttonurl'])) ? $defaultmasthead['buttonurl'] : '';
-        $mastheadArray['buttonclass']           = (isset($defaultmasthead['buttonclass'])) ? $defaultmasthead['buttonclass'] : '';
 
         // Find the masthead configured for the current menu item
         $menuMasthead = null;
@@ -105,6 +106,14 @@ class PrettymastheadHelper
         if ($menuMasthead !== null) {
             $this->updateMastheadArray($menuMasthead, $mastheadArray);
 
+            // A menu masthead with buttons of its own replaces the default buttons
+            $buttons = $this->getButtons(
+                $menuMasthead->mastheadbuttons ?? null,
+                $menuMasthead->mastheadbuttontext ?? null,
+                $menuMasthead->mastheadbuttonurl ?? null,
+                $menuMasthead->mastheadbuttonclass ?? null
+            ) ?: $buttons;
+
             $useArticle = ($app->getMenu()->getActive()?->query['view'] ?? '') === 'category';
         }
 
@@ -116,15 +125,15 @@ class PrettymastheadHelper
 
         // Truncate description if descLength is set
         if (isset($descLength) && !empty($descLength)) {
-            $mastheadArray['description'] = StringHelper::truncate(
-                (string) $mastheadArray['description'],
-                (int) $descLength,
-                true,
-                false
-            );
+            $mastheadArray['description'] = $this->truncate((string) $mastheadArray['description'], (int) $descLength);
         }
 
-        $mastheadArray['buttonurl'] = $this->getButtonUrl((string) $mastheadArray['buttonurl']);
+        $mastheadArray['buttons'] = $buttons;
+
+        // The first button under the single-button keys, for layout overrides written for one button
+        $mastheadArray['buttontext']  = $buttons[0]['text'] ?? '';
+        $mastheadArray['buttonurl']   = $buttons[0]['url'] ?? '';
+        $mastheadArray['buttonclass'] = $buttons[0]['class'] ?? '';
 
         // Only allow known values, as these end up in element names and class names
         $mastheadArray['titletag']              = $this->allowedValue($mastheadArray['titletag'], self::TITLE_TAGS, 'h2');
@@ -175,6 +184,89 @@ class PrettymastheadHelper
         }
 
         return 'd-none d-' . $visibility . '-block';
+    }
+
+    /**
+     * Shortens plain text to a maximum length, on a word boundary.
+     *
+     * Not HTMLHelper's string.truncate: that strips anything that looks like a tag,
+     * while this text is plain text that the layout escapes.
+     *
+     * @param   string  $text    The plain text.
+     * @param   int     $length  The maximum number of characters, including the ellipsis.
+     *
+     * @return  string
+     *
+     * @since   1.2.0
+     */
+
+    private function truncate(string $text, int $length): string
+    {
+        $text = trim(preg_replace('/\s+/u', ' ', $text) ?? $text);
+
+        if ($length <= 0 || StringHelper::strlen($text) <= $length) {
+            return $text;
+        }
+
+        $cut = StringHelper::substr($text, 0, max($length - 3, 0));
+
+        // Do not end in the middle of a word
+        if (StringHelper::substr($text, StringHelper::strlen($cut), 1) !== ' ') {
+            $space = StringHelper::strrpos($cut, ' ');
+
+            if ($space !== false) {
+                $cut = StringHelper::substr($cut, 0, $space);
+            }
+        }
+
+        return rtrim($cut) . '...';
+    }
+
+    /**
+     * Builds the list of buttons from a buttons subform value.
+     *
+     * Buttons without text are left out. The single button of modules saved before buttons
+     * were a list is used when the list is empty.
+     *
+     * @param   mixed  $rows         The subform value: rows with buttontext, buttonurl and buttonclass.
+     * @param   mixed  $legacyText   The text of the single button.
+     * @param   mixed  $legacyUrl    The URL of the single button.
+     * @param   mixed  $legacyClass  The class of the single button.
+     *
+     * @return  array[]  A list of buttons, each with text, url (not HTML-escaped) and class.
+     *
+     * @since   1.2.0
+     */
+
+    private function getButtons($rows, $legacyText = '', $legacyUrl = '', $legacyClass = ''): array
+    {
+        $rows   = (\is_object($rows) || \is_array($rows)) ? array_values((array) $rows) : [];
+        $rows[] = ['buttontext' => $legacyText, 'buttonurl' => $legacyUrl, 'buttonclass' => $legacyClass];
+        $last   = \count($rows) - 1;
+
+        $buttons = [];
+
+        foreach ($rows as $i => $row) {
+            // The single button only counts when the list gave no buttons
+            if ($i === $last && $buttons !== []) {
+                break;
+            }
+
+            $row  = (array) $row;
+            $text = trim((string) ($row['buttontext'] ?? ''));
+
+            if ($text === '') {
+                continue;
+            }
+
+            $buttons[] = [
+                'text'  => $text,
+                'url'   => $this->getButtonUrl((string) ($row['buttonurl'] ?? '')),
+                'class' => trim((string) ($row['buttonclass'] ?? '')),
+            ];
+        }
+
+        return $buttons;
     }
 
     /**

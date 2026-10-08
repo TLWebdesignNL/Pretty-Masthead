@@ -14,6 +14,7 @@
             <item>The article is loaded once per page, and the article override also works without menu based mastheads</item>
             <item>Missing article images, unpublished or restricted articles and missing menu items no longer cause warnings or show restricted content</item>
             <item>Remote article images are no longer fetched and keep their URL</item>
+            <item>A description with text like &lt;b&gt; in it is shown as typed instead of losing that text when shortened</item>
             <item>Hiding the title no longer leaves an empty heading; hide always outputs no heading at all</item>
             <item>The button always gets the Bootstrap btn class, so button styles work on every template</item>
             <item>The aspect ratio also works on Bootstrap 5 templates other than Cassiopeia</item>
@@ -21,6 +22,7 @@
         </fix>
         <addition>
             <item>Button URLs can be mailto:, tel: and other app links, and internal index.php links are routed to SEF URLs</item>
+            <item>Multiple buttons per masthead, each with its own text, link and class; an existing button becomes the first one</item>
             <item>Usage information on the Module tab</item>
         </addition>
         <change>
