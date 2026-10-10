@@ -7,7 +7,7 @@
     <authorUrl>https://tlwebdesign.nl</authorUrl>
     <copyright>TLWebdesign</copyright>
     <license>GNU General Public License version 2 or later; see LICENSE</license>
-    <version>1.2.0</version>
+    <version>1.3.0</version>
     <description>MOD_PRETTYMASTHEAD_XML_DESCRIPTION</description>
     <scriptfile>script.php</scriptfile>
     <namespace path="src">TlwebNamespace\Module\Prettymasthead</namespace>
@@ -122,7 +122,6 @@
                             type="media"
                             label="MOD_PRETTYMASTHEAD_FIELD_DEFAULTMASTHEADIMAGE_LABEL"
                             description="MOD_PRETTYMASTHEAD_FIELD_DEFAULTMASTHEADIMAGE_DESC"
-                            required="true"
                     />
                     <field
                             name="defaultmastheadtitle"
@@ -275,14 +274,12 @@
                                     type="media"
                                     label="MOD_PRETTYMASTHEAD_FIELD_MASTHEADIMAGE_LABEL"
                                     description="MOD_PRETTYMASTHEAD_FIELD_MASTHEADIMAGE_DESC"
-                                    required="true"
                             />
                             <field
                                     name="mastheadtitle"
                                     type="text"
                                     label="MOD_PRETTYMASTHEAD_FIELD_MASTHEADTITLE_LABEL"
                                     description="MOD_PRETTYMASTHEAD_FIELD_MASTHEADTITLE_DESC"
-                                    required="true"
                             />
                             <field
                                     name="mastheadtitletag"

@@ -2,6 +2,15 @@
     <changelog>
         <element>mod_prettymasthead</element>
         <type>module</type>
+        <version>1.3.0</version>
+        <addition>
+            <item>The default image is optional: without an image the masthead shows only its text, and nothing at all when there is no text either</item>
+            <item>Image and title of a menu based masthead are optional: left empty, they are taken from the default masthead</item>
+        </addition>
+    </changelog>
+    <changelog>
+        <element>mod_prettymasthead</element>
+        <type>module</type>
         <version>1.2.0</version>
         <security>
             <item>All masthead output is escaped, including titles, descriptions, classes and image URLs from articles</item>

@@ -23,10 +23,13 @@ $showTitle = $masthead['titlevisibility'] !== 'none' && trim((string) $masthead[
 
 $minHeight = (int) $minHeight;
 $maxHeight = (int) $maxHeight;
-?>
-<div class="pretty-masthead">
-    <?php
-    if (\is_object($masthead['image']) && $masthead['image']->url !== '') :
+
+$hasImage = \is_object($masthead['image']) && $masthead['image']->url !== '';
+$hasText  = $showTitle || !empty($masthead['description']) || !empty($masthead['buttons']);
+
+$style = '';
+
+if ($hasImage) {
     $width = (int) $masthead['image']->attributes['width'];
     $height = (int) $masthead['image']->attributes['height'];
     $aspectRatio = 0.25;
@@ -46,12 +49,22 @@ $maxHeight = (int) $maxHeight;
     // --bs-aspect-ratio for Bootstrap 5, --aspect-ratio for Cassiopeia
     $ratio = round($aspectRatio * 100) . '%';
     $style = '--bs-aspect-ratio: ' . $ratio . '; --aspect-ratio: ' . $ratio . ';'
-        . ' --pm-image: url(' . $imageUrl . ');'
-        . ($minHeight > 0 ? ' min-height: ' . $minHeight . 'px;' : '')
-        . ($maxHeight > 0 ? ' max-height: ' . $maxHeight . 'px;' : '');
+        . ' --pm-image: url(' . $imageUrl . ');';
+}
+
+$style = ltrim(
+    $style
+    . ($minHeight > 0 ? ' min-height: ' . $minHeight . 'px;' : '')
+    . ($maxHeight > 0 ? ' max-height: ' . $maxHeight . 'px;' : '')
+);
+?>
+<div class="pretty-masthead">
+    <?php
+    // Without an image the text is shown on its own, without the image ratio
+    if ($hasImage || $hasText) :
     ?>
-    <div class="ratio d-flex justify-content-<?php echo $e($masthead['position']); ?> align-items-center p-3 p-sm-5 <?php echo $e($mainDivClass); ?>"
-         style="<?php echo $e($style); ?>"
+    <div class="<?php echo $hasImage ? 'ratio ' : ''; ?>d-flex justify-content-<?php echo $e($masthead['position']); ?> align-items-center p-3 p-sm-5 <?php echo $e($mainDivClass); ?>"
+         <?php if ($style !== '') : ?>style="<?php echo $e($style); ?>"<?php endif; ?>
     >
         <div
                 class="content d-flex flex-column align-items-<?php echo $e($masthead['position']); ?>

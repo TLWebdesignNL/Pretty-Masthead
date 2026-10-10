@@ -1,7 +1,7 @@
 # Pretty Masthead
 Pretty Masthead module for Joomla 5.4 and Joomla 6.
 
-Shows a full-width masthead image with a title, and optionally a description and one or more buttons. Set a default masthead, add mastheads for specific menu items, and let articles use their own title and image.
+Shows a full-width masthead image with a title, a description and one or more buttons, each of them optional. Set a default masthead, add mastheads for specific menu items, and let articles use their own title and image.
 
 ## Requirements
 - Joomla 5.4 or Joomla 6
