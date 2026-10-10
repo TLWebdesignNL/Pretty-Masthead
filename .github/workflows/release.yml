@@ -22,28 +22,47 @@ jobs:
         with:
           ref: main
           token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
 
       - name: Extract version and build download URL
         id: vars
         run: |
           TAG="${GITHUB_REF_NAME}"
           VERSION="${TAG#V}"
-          ZIP_URL="https://github.com/${{ github.repository }}/archive/refs/tags/${TAG}.zip"
+          ZIP_NAME="mod_prettymasthead-${VERSION}.zip"
+          ZIP_URL="https://github.com/${{ github.repository }}/releases/download/${TAG}/${ZIP_NAME}"
           echo "tag=${TAG}" >> $GITHUB_OUTPUT
           echo "version=${VERSION}" >> $GITHUB_OUTPUT
+          echo "zip_name=${ZIP_NAME}" >> $GITHUB_OUTPUT
           echo "zip_url=${ZIP_URL}" >> $GITHUB_OUTPUT
 
-      - name: Download release zip and compute SHA256
+      # Build the package from the tag; export-ignore rules in .gitattributes
+      # keep repository-only files out of it.
+      - name: Build package and compute SHA256
         id: sha256
         run: |
-          curl -fL -o release.zip "${{ steps.vars.outputs.zip_url }}"
-          SHA=$(sha256sum release.zip | awk '{print $1}')
+          git archive --format=zip -o "${{ steps.vars.outputs.zip_name }}" "${{ steps.vars.outputs.tag }}"
+          SHA=$(sha256sum "${{ steps.vars.outputs.zip_name }}" | awk '{print $1}')
           echo "value=${SHA}" >> $GITHUB_OUTPUT
+
+      # Publish the package before updates.xml points sites at it.
+      - name: Create GitHub Release with the package
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAG: ${{ steps.vars.outputs.tag }}
+          VERSION: ${{ steps.vars.outputs.version }}
+          ZIP_NAME: ${{ steps.vars.outputs.zip_name }}
+        run: |
+          if gh release view "$TAG" > /dev/null 2>&1; then
+            gh release upload "$TAG" "$ZIP_NAME" --clobber
+          else
+            gh release create "$TAG" "$ZIP_NAME" --title "Pretty Masthead $VERSION" --generate-notes --verify-tag
+          fi
 
       - name: Append entry to updates.xml
         env:
           VERSION: ${{ steps.vars.outputs.version }}
-          TAG: ${{ steps.vars.outputs.tag }}
+          ZIP_URL: ${{ steps.vars.outputs.zip_url }}
           SHA256: ${{ steps.sha256.outputs.value }}
           TARGETPLATFORM: ${{ env.TARGETPLATFORM }}
         run: |
@@ -51,7 +70,7 @@ jobs:
           import re, os
 
           version = os.environ["VERSION"]
-          tag     = os.environ["TAG"]
+          zip_url = os.environ["ZIP_URL"]
           sha256  = os.environ["SHA256"]
           repo    = os.environ["GITHUB_REPOSITORY"]
           platform = os.environ["TARGETPLATFORM"]
@@ -72,8 +91,7 @@ jobs:
               raise SystemExit("No existing <update> block found to use as template.")
           last = blocks[-1]
 
-          # Set name, version, download URL and changelog URL explicitly, from this repository and tag
-          zip_url       = f"https://github.com/{repo}/archive/refs/tags/{tag}.zip"
+          # Set name, version, download URL and changelog URL explicitly; the download is the package attached to the GitHub Release
           changelog_url = f"https://raw.githubusercontent.com/{repo}/main/changelog.xml"
 
           new_block = re.sub(r'<name>[^<]*</name>', lambda m: f'<name>Pretty Masthead {version}</name>', last, count=1)
