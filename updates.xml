@@ -382,7 +382,7 @@
         <targetplatform name="joomla" version="(4|5|6)\..*"/>
         <client>site</client>
     </update>
-<update>
+    <update>
         <name>Pretty Masthead 1.2.0</name>
         <description/>
         <element>mod_prettymasthead</element>
