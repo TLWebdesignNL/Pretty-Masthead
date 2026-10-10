@@ -24,6 +24,7 @@
             <item>Button URLs can be mailto:, tel: and other app links, and internal index.php links are routed to SEF URLs</item>
             <item>Multiple buttons per masthead, each with its own text, link and class; an existing button becomes the first one</item>
             <item>Usage information on the Module tab</item>
+            <item>The default title is optional: leave it empty for a default masthead with only an image, while menu based mastheads keep their own title</item>
         </addition>
         <change>
             <item>Requires Joomla 5.4 or 6 and PHP 8.1 or newer</item>

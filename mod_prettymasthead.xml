@@ -129,7 +129,6 @@
                             type="text"
                             label="MOD_PRETTYMASTHEAD_FIELD_DEFAULTMASTHEADTITLE_LABEL"
                             description="MOD_PRETTYMASTHEAD_FIELD_DEFAULTMASTHEADTITLE_DESC"
-                            required="true"
                     />
                     <field
                             name="defaultmastheadtitletag"
